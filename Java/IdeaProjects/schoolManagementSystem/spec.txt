@@ -1,0 +1,28 @@
+This project is a school mgt system.
+
+It manages;
+- Students,
+- Teachers,
+- Funds
+
+//Financial management sys for the school
+
+It keeps track of:
+- student school fees
+- fees already paid
+- teachers salary
+
+//School
+
+Teachers,
+Students,
+Total money earned,
+Total money spent - teachers salary
+
+//Teachers
+
+id,
+name,
+salary
+fees paid,
+fees total

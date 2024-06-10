@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/AirConditionerProgram[with-tests]/AirConditionerProgram[with-tests].iml" filepath="$PROJECT_DIR$/AirConditionerProgram[with-tests]/AirConditionerProgram[with-tests].iml" />
+      <module fileurl="file://$PROJECT_DIR$/BankApp/BankApp.iml" filepath="$PROJECT_DIR$/BankApp/BankApp.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/IdeaProjects.iml" filepath="$PROJECT_DIR$/.idea/IdeaProjects.iml" />
+      <module fileurl="file://$PROJECT_DIR$/PhoneBook/PhoneBook.iml" filepath="$PROJECT_DIR$/PhoneBook/PhoneBook.iml" />
+      <module fileurl="file://$PROJECT_DIR$/functionsPractice/functionsPractice.iml" filepath="$PROJECT_DIR$/functionsPractice/functionsPractice.iml" />
+      <module fileurl="file://$PROJECT_DIR$/motorCycleObject/motorCycleObject.iml" filepath="$PROJECT_DIR$/motorCycleObject/motorCycleObject.iml" />
+      <module fileurl="file://$PROJECT_DIR$/multiplyArrayElements/multiplyArrayElements.iml" filepath="$PROJECT_DIR$/multiplyArrayElements/multiplyArrayElements.iml" />
+      <module fileurl="file://$PROJECT_DIR$/schoolManagementSystem/schoolManagementSystem.iml" filepath="$PROJECT_DIR$/schoolManagementSystem/schoolManagementSystem.iml" />
+      <module fileurl="file://$PROJECT_DIR$/visualizingGeospatialData/visualizingGeospatialData.iml" filepath="$PROJECT_DIR$/visualizingGeospatialData/visualizingGeospatialData.iml" />
+    </modules>
+  </component>
+</project>
