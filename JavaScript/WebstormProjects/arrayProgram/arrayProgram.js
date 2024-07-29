@@ -1,5 +1,5 @@
 class ArrayProgram{
-     productOfNewArray = [];
+    productOfNewArray = [];
     constructor(){
         this.list = {
             arrayOfNumbers: [2,3,5,3,5,3,2],

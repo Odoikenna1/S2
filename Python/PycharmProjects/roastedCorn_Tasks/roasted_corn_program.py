@@ -1,4 +1,4 @@
-from typing import List, Any
+from typing import List, Any, Set
 
 
 class RoastedCorn:
@@ -88,7 +88,30 @@ class RoastedCorn:
             lst_of_word_count_for_each_string.append(word_length_count)
         return lst_of_word_count_for_each_string
 
+    def construct_and_display_lst(self) -> List:
+        lst_of_numbers = []
+        for i in range(1, 16):
+            lst_of_numbers.append(i)
+        return lst_of_numbers
 
+    def duplicate_lst(self) -> List:
+        lst_of_numbers = self.construct_and_display_lst()
+        temp = []
+        temp = lst_of_numbers
+        return temp + lst_of_numbers
+
+    def remove_duplicate_elements(self) -> set[Any]:
+        # cleaned_set = set()
+        cleaned_set = set(self.duplicate_lst())
+        return cleaned_set
+
+    def add_every_third_element_in_a_given_lst(self):
+        given_lst = self.construct_and_display_lst()
+        summed_values = []
+        for i in range(1, len(given_lst), 3):
+            x = given_lst[i]+given_lst[i]
+            summed_values.append(x)
+        return summed_values
 
 
 

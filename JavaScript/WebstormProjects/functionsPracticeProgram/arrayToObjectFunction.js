@@ -11,18 +11,39 @@
 //
 // console.log(result);
 
-let arrayOfNumbers2 = [2,3,5,3,3,2,5];
+// let arrayOfNumbers2 = [2,3,5,3,3,2,5];
+//
+// const newObject = new Map();
+// let counter = 0;
+// for (let key in arrayOfNumbers2){
+//     if (arrayOfNumbers2[key]) {
+//         newObject.set(arrayOfNumbers2[key], counter+=1)
+//         counter = 0;
+//     }
+//     else {
+//         newObject.set(arrayOfNumbers2[key], counter)
+//         // counter = 0;
+//     }
+// }
+// console.log(newObject)
 
-const newObject = new Map();
-let counter = 0;
-for (let key in arrayOfNumbers2){
-    if (arrayOfNumbers2[key]) {
-        newObject.set(arrayOfNumbers2[key], counter+=1)
-        counter = 0;
-    }
-    else {
-        newObject.set(arrayOfNumbers2[key], counter)
-        // counter = 0;
-    }
-}
-console.log(newObject)
+// let input = [4, 6, 9];
+// let outputArray = [];
+// let remainder = 0;
+// for(let i = 0; i < input.length; i++){
+//     for(let j = 0; j < input.length; j++){
+//         remainder = input[i] / j;
+//         if(input[i] % remainder  === 0
+//         ){
+//             outputArray[i] = remainder;
+//             outputArray[i +1] = j;
+//         }
+//     }
+// }
+// console.log(outputArray);
+
+
+let arr = ["apple", "carrot", "orange"];
+
+arr.slice(0, 1);
+console.log(arr);

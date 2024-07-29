@@ -10,15 +10,22 @@ let expenseObj = {
     "entertainment": 80
 };
 
-let findElements = testScores.filter((filterGradesAboveSeventy) =>{
-         return filterGradesAboveSeventy >= 70;
-});
-let result = testScores.map((increaseGrades) => {
-    return increaseGrades += 5;
-});
-let squareOfArrNumbers = lstOfNumbers.map((lstOfNumber)=>{
-    return lstOfNumber * lstOfNumber;
-});
+function findTestScoresAboveSeventy(testScores){
+    return testScores.filter((filterGradesAboveSeventy) => {
+        return filterGradesAboveSeventy >= 70;
+    });
+}
+function increaseTestScoresByFive(testScores){
+    return testScores.map((increaseGrades) => {
+        return increaseGrades += 5;
+    });
+}
+function findSquaresOfNumbers(lstOfNumbers){
+    return lstOfNumbers.map((lstOfNumber) => {
+        return lstOfNumber * lstOfNumber;
+    });
+}
+
 function distributeBooks(arr){
     let lstOfBooks = ["sci-fi","documentary","thriller","drama"];
     let booksAssigned = {}
@@ -29,9 +36,12 @@ function distributeBooks(arr){
     }
     return booksAssigned;
 }
-let timelstForMorningSchedule = timeSchedule.filter((removeNoonTime) => {
-    return removeNoonTime > "12:00pm" && removeNoonTime <= "5:00pm";
-});
+function sortTimeTable(timeSchedule){
+    return timeSchedule.filter((removeNoonTime) => {
+        return removeNoonTime > "12:00pm" && removeNoonTime <= "5:00pm";
+    });
+}
+
 function sumValuesInObj(expenseObj){
     let sum =0;
     for(let c in expenseObj){
@@ -41,9 +51,11 @@ function sumValuesInObj(expenseObj){
 }
 
 
-console.log(result);
-console.log(findElements);
-console.log(squareOfArrNumbers);
+console.log(findTestScoresAboveSeventy(testScores));
+console.log(increaseTestScoresByFive(testScores));
+console.log(findSquaresOfNumbers(lstOfNumbers));
 console.log(distributeBooks(lstOfMembers));
-console.log(timelstForMorningSchedule);
+console.log(sortTimeTable(timeSchedule));
 console.log(sumValuesInObj(expenseObj))
+
+module.exports = {findTestScoresAboveSeventy, increaseTestScoresByFive, findSquaresOfNumbers, distributeBooks, sortTimeTable, sumValuesInObj}

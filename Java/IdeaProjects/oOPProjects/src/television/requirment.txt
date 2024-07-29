@@ -1,0 +1,7 @@
+Good morning people of God, for brain breaks Biko epp me do a television class...
+
+I need you to do the [use case diagram]
+the [class diagram],
+the [test plan and a working Television class]
+ with [unit tests]
+  as indicated on the test plan... Happy Sunday oh

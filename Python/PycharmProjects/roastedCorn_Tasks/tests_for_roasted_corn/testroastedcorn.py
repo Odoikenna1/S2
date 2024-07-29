@@ -53,5 +53,20 @@ class MyTestCase(unittest.TestCase):
         result = self.function_identifier.find_length_of_string_in_list_of_strings()
         self.assertEqual([4, 5, 2, 5, 5], result)
 
+    def test_that_construct_and_display_lst(self):
+        result = self.function_identifier.construct_and_display_lst()
+        self.assertEqual([1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15], result)
+
+    def test_duplicate_lst_function(self):
+        result = self.function_identifier.duplicate_lst()
+        self.assertEqual([1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15], result)
+
+    def test_duplicate_removed(self):
+        result =  self.function_identifier.remove_duplicate_elements()
+        self.assertEqual({1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15}, result)
+
+    def test_add_every_third_element_in_a_given_lst(self):
+        result = self.function_identifier.add_every_third_element_in_a_given_lst()
+        self.assertEqual([4, 10, 16, 22, 28], result)
 if __name__ == '__main__':
     unittest.main()
