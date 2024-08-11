@@ -34,6 +34,7 @@ public class Main {
         display(prompt);
         return input("What do you want to do?");
     }
+
     public static void main(String... args){
 
         switch(gotToMainMenu()){

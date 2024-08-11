@@ -15,7 +15,7 @@
 }
 
 .calculator{
-    background: #3a4452;
+    background: #38516d;
     padding: 20px;
     border-radius: 10px;
     /*border: 2px solid red;*/
@@ -46,7 +46,7 @@ form .display input{
     flex: 1;
     font-size: 45px;
     box-shadow: none;
-    background-color: #ffffff;
+    /*background-color: #ffffff;*/
     width: 320px;
 }
 form input.equal{

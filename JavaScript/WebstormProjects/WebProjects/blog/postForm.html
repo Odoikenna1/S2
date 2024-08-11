@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Post form</title>
+    <link rel="stylesheet" href="blogStyles.css">
+</head>
+<body>
+    <section class="formContainer ">
+        <div class="childContainer ">
+            <form action="">
+                <div class="formTitleField ">
+                <label>
+                    <input type="text" placeholder="Title goes here" class="titleInputField">
+                </label>
+                </div>
+                <div class="formContentField">
+                <label>
+                    <input type="text" placeholder="Content goes here..." class="contentInputField">
+                </label>
+                </div>
+            </form>
+            <div class="submitBtnContainer">
+                <div>
+                    <button class="submitBtn"><a href="#">Add post</a></button>
+                </div>
+            </div>
+        </div>
+    </section>
+    <script src="./blogScripts.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/axios@1.6.7/dist/axios.min.js"></script>
+</body>
+</html>

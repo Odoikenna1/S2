@@ -1,0 +1,81 @@
+*{
+    margin:0;
+    padding:0;
+    box-sizing: border-box;
+}
+body{
+    background-color: papayawhip;
+}
+/*.borderStyles{*/
+/*    border: 2px solid black;*/
+/*}*/
+.navContainer{
+    display: flex;
+    padding: 20px 25px;
+    background-color: white;
+}
+.navBar{
+    display: flex;
+    width: 90%;
+    margin: auto;
+    justify-content: space-between;
+}
+.logo{
+    color: green;
+    font-weight: bolder;
+    font-family: "Oswald", sans-serif;
+    font-optical-sizing: auto;
+    font-style: normal;
+}
+.navMenuContainer{
+    width: 100%;
+    display: flex;
+    justify-content: flex-end;
+
+}
+.navMenu{
+    width: 50%;
+    display: flex;
+    justify-content: space-evenly;
+    list-style: none;
+}
+.navMenu a{
+    text-decoration: none;
+    color: black;
+    font-family: "Roboto Mono", monospace;
+    font-optical-sizing: auto;
+    font-weight: bold;
+    font-style: normal;
+    transition: 0.2s;
+}
+.navMenu a:hover{
+    color: green;
+    transition: 0.3s;
+}
+.cart{
+    display: flex;
+
+}
+.cart a:hover{
+    color: green;
+}
+
+.heroSection{
+    border: 2px solid black;
+}
+
+.heroContainer{
+    width: 90vw;
+    height:80vh;
+    margin: auto;
+    border: 2px solid black;
+    background-image: url("./images/bg_1.jpg");
+    background-position: center;
+    background-repeat: no-repeat;
+}
+.heroImage {
+    width: 50%;
+    height:50%;
+    overflow-x: hidden;
+    background-position: center;
+}

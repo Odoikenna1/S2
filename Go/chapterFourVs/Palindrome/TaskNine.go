@@ -1,11 +1,12 @@
 package main
 
-import "fmt"
+import (
+	"fmt"
+)
 
 func main(){
 	input := 0
-	fmt.Print("")
 	fmt.Print("Enter a sequence of numbers: ")
 	fmt.Scan(&input)
-	
+	fmt.Println(input)
 }

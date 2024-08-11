@@ -20,7 +20,5 @@ public class CommentServiceImplTest {
 
         assertEquals(1, commentRepository.count());
 
-
-
     }
 }
