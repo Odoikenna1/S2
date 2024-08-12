@@ -6,11 +6,13 @@ import com.semicolon.africa.dtos.request.AddToCartRequest;
 import com.semicolon.africa.dtos.request.ReduceItemQuantityRequest;
 import com.semicolon.africa.dtos.request.RemoveItemFromCartRequest;
 import com.semicolon.africa.dtos.request.IncreaseItemQuantityRequest;
+import com.semicolon.africa.dtos.response.AddToCartResponse;
 
 import java.util.List;
 
 public interface CartServices {
-    public List<Item> addToCart(AddToCartRequest request);
+    public ShoppingCart saveCart(ShoppingCart shoppingCart);
+    public AddToCartResponse addToCart(AddToCartRequest request);
     public List<Item> removeItemFromCart(RemoveItemFromCartRequest request);
     public Item findItemByProductId(List<Item> listOfItemsFound, String itemProductId);
     public List<Item> findAllItemsBy(String userId);

@@ -4,7 +4,7 @@ import com.semicolon.africa.data.domain.*;
 import com.semicolon.africa.data.models.User;
 import com.semicolon.africa.data.repositories.ProductRepository;
 import com.semicolon.africa.dtos.request.*;
-import com.semicolon.africa.dtos.response.RegisterResponse;
+import com.semicolon.africa.dtos.response.*;
 import com.semicolon.africa.services.*;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -70,45 +70,9 @@ class UserServicesTest {
     void test_that_CustomerIsSaved(){
         assertThat(response.getFirstName(), is("David"));
         assertEquals("David your account has been created successfully.", response.getMessage());
-        System.out.println(response.getUser().getId());
+        System.out.println(response.getUserId());
     }
-//    @Test
-//    void testThat_UserCanLogOut_OfApp(){
-//        LogOutRequest logOutRequest = new LogOutRequest();
-//        logOutRequest.setUserId(response.getUser().getId());
-//
-//        RequestToFindUser requestToFindUser = new RequestToFindUser();
-//        requestToFindUser.setUserId(logOutRequest.getUserId());
-//
-//        User userFound = userService.findUserById(requestToFindUser);
-//        assertThat(userFound.getSessionStatus(), is(SessionStatus.LOGGED_IN));
-//
-//        SessionStatus status = userService.logOut(logOutRequest);
-//        assertThat(status, is(SessionStatus.LOGGED_OUT));
-//    }
-//    @Test
-//    void testThat_userCanVerifyLogIn_WhenLoggedOut(){
-//        LogOutRequest logOutRequest = new LogOutRequest();
-//        logOutRequest.setUserId(response.getUser().getId());
-//
-//        RequestToFindUser requestToFindUser = new RequestToFindUser();
-//        requestToFindUser.setUserId(logOutRequest.getUserId());
-//
-//        User userFound = userService.findUserById(requestToFindUser);
-//        assertThat(userFound.getSessionStatus(), is(SessionStatus.LOGGED_IN));
-//
-//        SessionStatus status = userService.logOut(logOutRequest);
-//        assertThat(status, is(SessionStatus.LOGGED_OUT));
-//
-//        LogInRequest logInRequest = new LogInRequest();
-//        logInRequest.setUserName(userFound.getUserName());
-//        logInRequest.setUserId(response.getUser().getId());
-//        logInRequest.setSessionStatus(userFound.getSessionStatus());
-//        logInRequest.setPassword(userFound.getPassword());
-//
-//        SessionStatus sessionStatus = userService.verifyLogIn(logInRequest);
-//        assertThat(sessionStatus, is(SessionStatus.LOGGED_IN));
-//    }
+
     @Test
     void testThat_UserCan_AddItemToAnEmptyCart(){
 
@@ -129,11 +93,11 @@ class UserServicesTest {
 
         addToCartRequest.setItem(initializedItem);
         addToCartRequest.setQuantity(initializedItem.getQuantity());
-        addToCartRequest.setUserId(response.getUser().getId());
+        addToCartRequest.setUserId(response.getUserId());
 //        we want to add the item to the user's cart
 
-        List<Item> items = cartServices.addToCart(addToCartRequest);
-        assertThat(items.size(), is(1));
+        AddToCartResponse addToCartResponse = cartServices.addToCart(addToCartRequest);
+        assertThat(addToCartResponse.getItemListSize(), is(1));
 //        The cart belonging to the user who sent the request can be found
 //        The item can be added to the cart (arrayList) according the quantity of the items specified
 
@@ -158,11 +122,11 @@ class UserServicesTest {
 
         addToCartRequest.setItem(initializedItem);
         addToCartRequest.setQuantity(initializedItem.getQuantity());
-        addToCartRequest.setUserId(response.getUser().getId());
-        System.out.println(response.getUser().getId());
+        addToCartRequest.setUserId(response.getUserId());
+        System.out.println(response.getUserId());
 
-        List<Item> itemsList1 = cartServices.addToCart(addToCartRequest);
-        assertThat(itemsList1.size(), is(1));
+        AddToCartResponse addToCartResponse = cartServices.addToCart(addToCartRequest);
+        assertThat(addToCartResponse.getItemListSize(), is(1));
 
         //        User sends an add to cart request
         AddToCartRequest addToCartRequest2 = new AddToCartRequest();
@@ -181,14 +145,14 @@ class UserServicesTest {
 
         addToCartRequest2.setItem(initializedItem2);
         addToCartRequest2.setQuantity(initializedItem2.getQuantity());
-        addToCartRequest2.setUserId(response.getUser().getId());
+        addToCartRequest2.setUserId(response.getUserId());
 
-         List<Item> currentListOfItems = cartServices.addToCart(addToCartRequest2);
-        assertThat(currentListOfItems.size(), is(2));
+        AddToCartResponse addToCartResponse2 = cartServices.addToCart(addToCartRequest2);
+        assertThat(addToCartResponse2.getItemListSize(), is(2));
 
         RemoveItemFromCartRequest removeItemFromCartRequest = new RemoveItemFromCartRequest();
         removeItemFromCartRequest.setItem(initializedItem);
-        removeItemFromCartRequest.setUserId(response.getUser().getId());
+        removeItemFromCartRequest.setUserId(response.getUserId());
         List<Item> updatedListOfItems = cartServices.removeItemFromCart(removeItemFromCartRequest);
 
         assertThat(updatedListOfItems.size(), is(1));
@@ -215,10 +179,10 @@ class UserServicesTest {
 
         addToCartRequest1.setItem(initializedItem1);
         addToCartRequest1.setQuantity(initializedItem1.getQuantity());
-        addToCartRequest1.setUserId(response.getUser().getId());
+        addToCartRequest1.setUserId(response.getUserId());
 
-        List<Item> itemsList1 = cartServices.addToCart(addToCartRequest1);
-        assertThat(itemsList1.size(), is(1));
+        AddToCartResponse addToCartResponse2 = cartServices.addToCart(addToCartRequest1);
+        assertThat(addToCartResponse2.getItemListSize(), is(1));
 
 //        Adding second item
         AddToCartRequest addToCartRequest2 = new AddToCartRequest();
@@ -237,13 +201,13 @@ class UserServicesTest {
 
         addToCartRequest2.setItem(initializedItem2);
         addToCartRequest2.setQuantity(initializedItem2.getQuantity());
-        addToCartRequest2.setUserId(response.getUser().getId());
+        addToCartRequest2.setUserId(response.getUserId());
 
-        List<Item> itemsList2 = cartServices.addToCart(addToCartRequest1);
-        assertThat(itemsList2.size(), is(2));
+        AddToCartResponse addToCartResponse3 = cartServices.addToCart(addToCartRequest1);
+        assertThat(addToCartResponse3.getItemListSize(), is(2));
 
         RemoveItemFromCartRequest removeItemFromCartRequest = new RemoveItemFromCartRequest();
-        removeItemFromCartRequest.setUserId(response.getUser().getId());
+        removeItemFromCartRequest.setUserId(response.getUserId());
         removeItemFromCartRequest.setItem(initializedItem1);
         List<Item> updatedListOfItems = cartServices.removeItemFromCart(removeItemFromCartRequest);
         assertThat(updatedListOfItems.size(), is(1));
@@ -266,10 +230,10 @@ class UserServicesTest {
 
         addToCartRequest3.setItem(initializedItem3);
         addToCartRequest3.setQuantity(initializedItem3.getQuantity());
-        addToCartRequest3.setUserId(response.getUser().getId());
+        addToCartRequest3.setUserId(response.getUserId());
 
-        List<Item> itemsList3 = cartServices.addToCart(addToCartRequest3);
-        assertThat(itemsList3.size(), is(2));
+        AddToCartResponse addToCartResponse= cartServices.addToCart(addToCartRequest3);
+        assertThat(addToCartResponse.getItemListSize(), is(2));
     }
 
     @Test
@@ -292,15 +256,15 @@ class UserServicesTest {
 
         addToCartRequest1.setItem(initializedItem1);
         addToCartRequest1.setQuantity(initializedItem1.getQuantity());
-        addToCartRequest1.setUserId(response.getUser().getId());
+        addToCartRequest1.setUserId(response.getUserId());
 
-        List<Item> itemsList1 = cartServices.addToCart(addToCartRequest1);
-        assertThat(itemsList1.size(), is(1));
+        AddToCartResponse addToCartResponse = cartServices.addToCart(addToCartRequest1);
+        assertThat(addToCartResponse.getItemListSize(), is(1));
 
         IncreaseItemQuantityRequest increaseItemQuantityRequest = new IncreaseItemQuantityRequest();
         increaseItemQuantityRequest.setItem(initializedItem1);
         increaseItemQuantityRequest.setProductId(initializedItem1.getProduct().getId());
-        increaseItemQuantityRequest.setUserId(response.getUser().getId());
+        increaseItemQuantityRequest.setUserId(response.getUserId());
 
         int increasedItemQuantity = cartServices.increaseItemQuantity(increaseItemQuantityRequest);
         assertThat(increasedItemQuantity, is(7));
@@ -325,15 +289,15 @@ class UserServicesTest {
 
         addToCartRequest1.setItem(initializedItem1);
         addToCartRequest1.setQuantity(initializedItem1.getQuantity());
-        addToCartRequest1.setUserId(response.getUser().getId());
+        addToCartRequest1.setUserId(response.getUserId());
 
-        List<Item> itemsList1 = cartServices.addToCart(addToCartRequest1);
-        assertThat(itemsList1.size(), is(1));
+        AddToCartResponse addToCartResponse = cartServices.addToCart(addToCartRequest1);
+        assertThat(addToCartResponse.getItemListSize(), is(1));
 
         ReduceItemQuantityRequest reduceItemQuantityRequest = new ReduceItemQuantityRequest();
         reduceItemQuantityRequest.setItem(initializedItem1);
         reduceItemQuantityRequest.setProductId(initializedItem1.getProduct().getId());
-        reduceItemQuantityRequest.setUserId(response.getUser().getId());
+        reduceItemQuantityRequest.setUserId(response.getUserId());
 
         int increasedItemQuantity = cartServices.reduceItemQuantity(reduceItemQuantityRequest);
         assertThat(increasedItemQuantity, is(5));
@@ -358,10 +322,10 @@ class UserServicesTest {
 
         addToCartRequest1.setItem(initializedItem1);
         addToCartRequest1.setQuantity(initializedItem1.getQuantity());
-        addToCartRequest1.setUserId(response.getUser().getId());
+        addToCartRequest1.setUserId(response.getUserId());
 
-        List<Item> itemsList1 = cartServices.addToCart(addToCartRequest1);
-        assertThat(itemsList1.size(), is(1));
+        AddToCartResponse addToCartResponse = cartServices.addToCart(addToCartRequest1);
+        assertThat(addToCartResponse.getItemListSize(), is(1));
 
         //       User sends an add to cart request
         AddToCartRequest addToCartRequest2 = new AddToCartRequest();
@@ -380,10 +344,10 @@ class UserServicesTest {
 
         addToCartRequest2.setItem(initializedItem2);
         addToCartRequest2.setQuantity(initializedItem2.getQuantity());
-        addToCartRequest2.setUserId(response.getUser().getId());
+        addToCartRequest2.setUserId(response.getUserId());
 
-        List<Item> listOfItems2 = cartServices.addToCart(addToCartRequest2);
-        assertThat(listOfItems2.size(), is(2));
+        AddToCartResponse addToCartResponse3 = cartServices.addToCart(addToCartRequest2);
+        assertThat(addToCartResponse3.getItemListSize(), is(2));
 
 
 //       User sends an add to cart request
@@ -403,14 +367,14 @@ class UserServicesTest {
 
         addToCartRequest3.setItem(initializedItem3);
         addToCartRequest3.setQuantity(initializedItem2.getQuantity());
-        addToCartRequest3.setUserId(response.getUser().getId());
+        addToCartRequest3.setUserId(response.getUserId());
 
-        List<Item> listOfItems3 = cartServices.addToCart(addToCartRequest3);
-        assertThat(listOfItems3.size(), is(3));
+        AddToCartResponse addToCartResponse4 = cartServices.addToCart(addToCartRequest3);
+        assertThat(addToCartResponse4.getItemListSize(), is(3));
 
         IncreaseItemQuantityRequest increaseItemQuantityRequest = new IncreaseItemQuantityRequest();
         increaseItemQuantityRequest.setItem(initializedItem2);
-        increaseItemQuantityRequest.setUserId(response.getUser().getId());
+        increaseItemQuantityRequest.setUserId(response.getUserId());
         increaseItemQuantityRequest.setProductId(initializedItem2.getProduct().getId());
 
         int updatedQuantity = itemServices.increaseItemQuantity(increaseItemQuantityRequest);
@@ -439,10 +403,10 @@ class UserServicesTest {
 
         addToCartRequest1.setItem(initializedItem1);
         addToCartRequest1.setQuantity(initializedItem1.getQuantity());
-        addToCartRequest1.setUserId(response.getUser().getId());
+        addToCartRequest1.setUserId(response.getUserId());
 
-        List<Item> itemsList1 = cartServices.addToCart(addToCartRequest1);
-        assertThat(itemsList1.size(), is(1));
+        AddToCartResponse addToCartResponse1= cartServices.addToCart(addToCartRequest1);
+        assertThat(addToCartResponse1.getItemListSize(), is(1));
 
         //       User sends an add to cart request
         AddToCartRequest addToCartRequest2 = new AddToCartRequest();
@@ -461,23 +425,56 @@ class UserServicesTest {
 
         addToCartRequest2.setItem(initializedItem2);
         addToCartRequest2.setQuantity(initializedItem2.getQuantity());
-        addToCartRequest2.setUserId(response.getUser().getId());
+        addToCartRequest2.setUserId(response.getUserId());
 
-        List<Item> listOfItems2 = cartServices.addToCart(addToCartRequest2);
-        assertThat(listOfItems2.size(), is(2));
+        AddToCartResponse addToCartResponse2= cartServices.addToCart(addToCartRequest2);
+        assertThat(addToCartResponse2.getItemListSize(), is(2));
+
+        ShoppingCart cartFound = cartServices.findCartByUserId(response.getUserId());
 
         CheckOutRequest checkOutRequest = new CheckOutRequest();
         checkOutRequest.setId("123");
-        checkOutRequest.setUserId(response.getUser().getId());
-        checkOutRequest.setItems(listOfItems2);
+        checkOutRequest.setUserId(response.getUserId());
+        checkOutRequest.setItems(cartFound.getItems());
         checkOutRequest.setSubTotal(BigDecimal.valueOf(1000.00));
         checkOutRequest.setPaymentMethod(PaymentMethod.BANK_TRANSFER);
-        checkOutRequest.setBillingAddress(response.getUser().getAddress());
-        checkOutRequest.setItems(cartServices.findAllItemsBy(response.getUser().getId()));
+        checkOutRequest.setBillingAddress(response.getAddress());
+        checkOutRequest.setItems(cartServices.findAllItemsBy(response.getUserId()));
         checkOutRequest.setStatus(OrderStatus.PENDING);
-        Order orderCreated = orderServices.createAnOrder(checkOutRequest);
+        CheckOutResponse orderCreated = orderServices.createAnOrder(checkOutRequest);
 
         assertThat(orderCreated.getId(), is(checkOutRequest.getId()));
     }
+//    @Test
+//    void testThat_UserCanLogOut_OfApp(){
+//        LogOutRequest logOutRequest = new LogOutRequest();
+//        logOutRequest.setUserId(response.getUserId());
+//
+//        User userFound = userService.findUserById(logOutRequest.getUserId());
+//        assertThat(userFound.getSessionStatus(), is(SessionStatus.LOGGED_IN));
+//
+//        LogOutResponse status = userService.logOut(logOutRequest);
+//        assertThat(status.getSessionStatus(), is(SessionStatus.LOGGED_OUT));
+//    }
+//    @Test
+//    void testThat_userCanVerifyLogIn_WhenLoggedOut(){
+//        LogOutRequest logOutRequest = new LogOutRequest();
+//        logOutRequest.setUserId(response.getUserId());
+//
+//        User userFound = userService.findUserById(logOutRequest.getUserId());
+//        assertThat(userFound.getSessionStatus(), is(SessionStatus.LOGGED_IN));
+//
+//        LogOutResponse status = userService.logOut(logOutRequest);
+//        assertThat(status.getSessionStatus(), is(SessionStatus.LOGGED_OUT));
+//
+//        LogInRequest logInRequest = new LogInRequest();
+//        logInRequest.setEmail(userFound.getEmail());
+//        logInRequest.setUserId(response.getUserId());
+//        logInRequest.setSessionStatus(userFound.getSessionStatus());
+//        logInRequest.setPassword(userFound.getPassword());
+//
+//        LogInResponse sessionStatus = userService.verifyLoginDetails(logInRequest);
+//        assertThat(sessionStatus.getSessionStatus(), is(SessionStatus.LOGGED_IN));
+//    }
 
 }

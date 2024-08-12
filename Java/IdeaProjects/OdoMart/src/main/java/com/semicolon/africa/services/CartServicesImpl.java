@@ -4,6 +4,7 @@ import com.semicolon.africa.data.domain.ShoppingCart;
 import com.semicolon.africa.data.domain.Item;
 import com.semicolon.africa.data.repositories.CartRepository;
 import com.semicolon.africa.dtos.request.*;
+import com.semicolon.africa.dtos.response.AddToCartResponse;
 import lombok.RequiredArgsConstructor;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.stereotype.Service;
@@ -17,13 +18,22 @@ public class CartServicesImpl implements CartServices {
 
 
     @Override
-    public List<Item> addToCart(AddToCartRequest request) {
+    public ShoppingCart saveCart(ShoppingCart shoppingCart) {
+        ShoppingCart cartSaved = cartRepo.save(shoppingCart);
+        return cartSaved;
+    }
+
+    @Override
+    public AddToCartResponse addToCart(AddToCartRequest request) {
+        AddToCartResponse addToCartResponse = new AddToCartResponse();
         ShoppingCart shoppingCartFound = findCartByUserId(request.getUserId());
         List<Item> items = shoppingCartFound.getItems();
         items.add(request.getItem());
         shoppingCartFound.setItems(items);
         ShoppingCart shoppingCartUpdated = cartRepo.save(shoppingCartFound);
-        return shoppingCartUpdated.getItems();
+        addToCartResponse.setMessage("Item added successfully.");
+        addToCartResponse.setItemListSize(shoppingCartUpdated.getItems().size());
+        return addToCartResponse;
     }
 
     @Override

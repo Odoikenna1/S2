@@ -4,6 +4,7 @@ import com.semicolon.africa.data.domain.Order;
 import com.semicolon.africa.data.domain.OrderStatus;
 import com.semicolon.africa.data.repositories.OrderRepository;
 import com.semicolon.africa.dtos.request.CheckOutRequest;
+import com.semicolon.africa.dtos.response.CheckOutResponse;
 import lombok.RequiredArgsConstructor;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.stereotype.Service;
@@ -13,7 +14,7 @@ public class OrderServicesImpl implements OrderServices{
 
     private final OrderRepository orderRepo;
     @Override
-    public Order createAnOrder(@NotNull CheckOutRequest checkOutRequest) {
+    public CheckOutResponse createAnOrder(@NotNull CheckOutRequest checkOutRequest) {
         Order order = new Order();
         order.setId(checkOutRequest.getId());
         order.setUserId(checkOutRequest.getUserId());
@@ -23,6 +24,14 @@ public class OrderServicesImpl implements OrderServices{
         order.setItems(checkOutRequest.getItems());
         order.setStatus(OrderStatus.PENDING);
         Order savedOrder = orderRepo.save(order);
-        return savedOrder;
+        CheckOutResponse checkOutResponse = new CheckOutResponse();
+        checkOutResponse.setId(savedOrder.getId());
+        checkOutResponse.setOrderCreationDate(savedOrder.getOrderCreationDate());
+        checkOutResponse.setStatus(savedOrder.getStatus());
+        checkOutResponse.setSubTotal(savedOrder.getSubTotal());
+        checkOutResponse.setItems(savedOrder.getItems());
+        checkOutResponse.setBillingAddress(savedOrder.getBillingAddress());
+        checkOutResponse.setPaymentMethod(savedOrder.getPaymentMethod());
+        return checkOutResponse;
     }
 }

@@ -1,5 +1,6 @@
 package com.semicolon.africa.services;
 
+import com.semicolon.africa.data.domain.ShoppingCart;
 import com.semicolon.africa.data.models.Customer;
 import com.semicolon.africa.data.models.User;
 import com.semicolon.africa.data.repositories.UserRepository;
@@ -12,10 +13,12 @@ import org.springframework.stereotype.Service;
 public class CustomerServicesImpl implements CustomerServices{
 
     private final UserRepository userRepository;
+    private final CartServicesImpl cartServicesImpl;
 
     @Override
-    public Customer registerCustomer(RegisterUserAuthenticationRequest registerUserAuthenticationRequest) {
+    public User registerCustomer(RegisterUserAuthenticationRequest registerUserAuthenticationRequest) {
         Customer newCustomer = new Customer();
+        ShoppingCart newCart = new ShoppingCart();
         newCustomer.setFirstName(registerUserAuthenticationRequest.getFirstName());
         newCustomer.setLastName(registerUserAuthenticationRequest.getLastName());
         newCustomer.setUserName(registerUserAuthenticationRequest.getUserName());
@@ -25,9 +28,10 @@ public class CustomerServicesImpl implements CustomerServices{
         newCustomer.setSessionStatus(registerUserAuthenticationRequest.getSessionStatus());
         newCustomer.setDateOfBirth(registerUserAuthenticationRequest.getDateOfBirth());
         newCustomer.setRole(registerUserAuthenticationRequest.getRole());
-        User customerToUser = newCustomer;
-        User customerSaved = userRepository.save(customerToUser);
-        return (Customer) customerSaved;
+        Customer customerSaved = userRepository.save(newCustomer);
+        newCart.setUserId(customerSaved.getId());
+        cartServicesImpl.saveCart(newCart);
+        return customerSaved;
     }
 
     @Override
@@ -39,9 +43,9 @@ public class CustomerServicesImpl implements CustomerServices{
     @Override
     public boolean validateCustomer(LogInRequest logInRequest) {
         Customer customerFound = findCustomerBy(logInRequest.getUserId());
-        boolean userName = customerFound.getUserName().equals(logInRequest.getUserName());
+        boolean userEmail = customerFound.getEmail().equals(logInRequest.getEmail());
         boolean passwordIsCorrect =  customerFound.getPassword().equals(logInRequest.getPassword());
-        if(userName && passwordIsCorrect) return true;
+        if(userEmail && passwordIsCorrect) return true;
         return false;
     }
 

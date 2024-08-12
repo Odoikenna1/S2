@@ -20,6 +20,7 @@ public class User {
     private String address;
     private String dateOfBirth;
     private Gender gender;
+    private String email;
     private String password;
     private Role role;
     private SessionStatus sessionStatus;
