@@ -6,36 +6,31 @@
 //
 // const postContainer = document.querySelector('.postContainer');
 
-const form = document.querySelector('.childContainer form');
-const addPostBtn = document.querySelector('.submitBtn');
+const form = document.querySelector('.blogForm');
+console.log(form)
 let postObject ={
     "title": "",
     "content": ""
 }
-const titleValue =  document.querySelector('.titleInputField');
-const contentValue = document.querySelector('.contentInputField');
-form.addEventListener('keyup', (event) => {
+// const titleValue =  document.querySelector('.titleInputField');
+// const contentValue = document.querySelector('.contentInputField');
+form.addEventListener('submit', (event) => {
     event.preventDefault();
-    const titleValue =  document.querySelector('.titleInputField').value;
-    const contentValue = document.querySelector('.contentInputField').value;
+    const titleValue =  document.querySelector('.titleInputField');
+    const contentValue = document.querySelector('.contentInputField');
+    console.log(titleValue);
+    console.log(contentValue);
 
      postObject ={
         "title": titleValue,
         "content": contentValue
     }
-    console.log(postObject)
-})
-addPostBtn.addEventListener('click', (event) => {
-    event.preventDefault();
-    if(titleValue.value !== ""){
-        postRequest(postObject)
-    }
+    console.log(postObject);
+    postRequest(postObject);
 })
 
 function postRequest(postObject){
-    const titleValue= postObject.title
-    const contentValue = postObject.content
-    axios.post('http://localhost:8080/api/v1/post', {title: titleValue, content: contentValue})
+    axios.post('http://localhost:8080/api/v1/post', {data: postObject})
          .then(response => console.log(response))
          .catch(error => console.log(error))
 }

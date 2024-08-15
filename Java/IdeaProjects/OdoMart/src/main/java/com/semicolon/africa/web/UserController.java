@@ -9,14 +9,14 @@ import com.semicolon.africa.services.CartServicesImpl;
 import com.semicolon.africa.services.UserServices;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+
 import org.springframework.web.bind.annotation.RestController;
 
-@RestController
+@RestController("http://localhost:8080/")
 @RequiredArgsConstructor
 public class UserController {
 
@@ -24,7 +24,7 @@ public class UserController {
     private final CartServicesImpl cartServicesImpl;
     private final CartServices cartServices;
 
-    @PostMapping("api/v1/signup")
+    @PostMapping("api/odomart/signup")
     public ResponseEntity<?> signUp(RegisterUserAuthenticationRequest registerUserRequest){
         try{
             RegisterResponse feedBack = userServices.signUp(registerUserRequest);
@@ -33,7 +33,7 @@ public class UserController {
             return new ResponseEntity<>(new ApiResponse(error.getMessage(), false), HttpStatus.BAD_REQUEST);
         }
     }
-    @RequestMapping("")
+    @PostMapping("api/odomart/cart")
     public ResponseEntity<?> addToCart(AddToCartRequest addToCartRequest){
         try{
             AddToCartResponse addToCartResponse = cartServices.addToCart(addToCartRequest);
@@ -43,7 +43,7 @@ public class UserController {
         }
     }
 
-    @RequestMapping()
+    @PatchMapping("api/odomart/user")
     public ResponseEntity<?> increaseItemInCart(IncreaseItemQuantityRequest increaseItemQuantityRequest){
         try{
             int newValue = cartServices.increaseItemQuantity(increaseItemQuantityRequest);
@@ -52,7 +52,7 @@ public class UserController {
             return new ResponseEntity<>(new ApiResponse(error.getMessage(), false), HttpStatus.BAD_REQUEST);
         }
     }
-    @RequestMapping()
+    @PatchMapping("api/odomart/reduceitemquantity")
     public ResponseEntity<?> reduceQuantity(ReduceItemQuantityRequest reduceItemQuantityRequest){
         try{
            int updatedQuantity =  cartServices.reduceItemQuantity(reduceItemQuantityRequest);

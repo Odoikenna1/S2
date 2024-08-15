@@ -97,7 +97,8 @@ class UserServicesTest {
 //        we want to add the item to the user's cart
 
         AddToCartResponse addToCartResponse = cartServices.addToCart(addToCartRequest);
-        assertThat(addToCartResponse.getItemListSize(), is(1));
+        assertThat(addToCartResponse.getItemListSize()
+                , is(1));
 //        The cart belonging to the user who sent the request can be found
 //        The item can be added to the cart (arrayList) according the quantity of the items specified
 
