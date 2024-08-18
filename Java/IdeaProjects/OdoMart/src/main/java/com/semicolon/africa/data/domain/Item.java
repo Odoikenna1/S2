@@ -7,7 +7,8 @@ import java.math.BigDecimal;
 
 @Data
 
-public class Item {
+public class
+Item {
     private Product product;
     private BigDecimal price;
     private String cartId;

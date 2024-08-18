@@ -7,5 +7,5 @@ import lombok.Setter;
 @Setter
 @Getter
 public class LogOutResponse {
-    private SessionStatus sessionStatus;
+    private boolean loggedIn = false;
 }

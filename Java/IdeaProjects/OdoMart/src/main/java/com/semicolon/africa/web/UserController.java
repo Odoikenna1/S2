@@ -1,43 +1,49 @@
 package com.semicolon.africa.web;
 
 import com.semicolon.africa.dtos.request.*;
-import com.semicolon.africa.dtos.response.AddToCartResponse;
-import com.semicolon.africa.dtos.response.ApiResponse;
-import com.semicolon.africa.dtos.response.RegisterResponse;
+import com.semicolon.africa.dtos.response.*;
 import com.semicolon.africa.services.CartServices;
 import com.semicolon.africa.services.CartServicesImpl;
 import com.semicolon.africa.services.UserServices;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.PatchMapping;
-import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.*;
 
-import org.springframework.web.bind.annotation.RestController;
-
-@RestController("http://localhost:8080/")
+@CrossOrigin("*")
+@RestController
 @RequiredArgsConstructor
 public class UserController {
 
     private final UserServices userServices;
-    private final CartServicesImpl cartServicesImpl;
     private final CartServices cartServices;
 
     @PostMapping("api/odomart/signup")
-    public ResponseEntity<?> signUp(RegisterUserAuthenticationRequest registerUserRequest){
+    public ResponseEntity<?> signUp(@RequestBody RegisterUserRequest registerUserRequest){
         try{
-            RegisterResponse feedBack = userServices.signUp(registerUserRequest);
+            UserSignUpResponse feedBack = userServices.signUp(registerUserRequest);
             return new ResponseEntity(new ApiResponse(feedBack, true), HttpStatus.CREATED);
         } catch (Exception error){
             return new ResponseEntity<>(new ApiResponse(error.getMessage(), false), HttpStatus.BAD_REQUEST);
         }
     }
+    @PostMapping("api/ododmart/exit")
+    public ResponseEntity<?> logOut(@RequestBody LogOutRequest logOutRequest){
+        try{
+            LogOutResponse response = userServices.logOut(logOutRequest);
+            return new ResponseEntity<>(new ApiResponse(response, true), HttpStatus.ACCEPTED);
+        }catch(Exception error){
+            return new ResponseEntity<>(new ApiResponse(error.getMessage(), false), HttpStatus.BAD_REQUEST);
+        }
+    }
+
     @PostMapping("api/odomart/cart")
-    public ResponseEntity<?> addToCart(AddToCartRequest addToCartRequest){
+    public ResponseEntity<?> addToCart(@RequestBody AddToCartRequest addToCartRequest){
         try{
             AddToCartResponse addToCartResponse = cartServices.addToCart(addToCartRequest);
-            return new ResponseEntity(new AddToCartResponse(), HttpStatus.CREATED);
+            return new ResponseEntity(addToCartResponse , HttpStatus.CREATED);
         } catch(Exception error){
             return new ResponseEntity<>(new ApiResponse(error.getMessage(), false), HttpStatus.BAD_REQUEST);
         }
@@ -46,7 +52,7 @@ public class UserController {
     @PatchMapping("api/odomart/user")
     public ResponseEntity<?> increaseItemInCart(IncreaseItemQuantityRequest increaseItemQuantityRequest){
         try{
-            int newValue = cartServices.increaseItemQuantity(increaseItemQuantityRequest);
+            IncreaseQuantityResponse newValue = cartServices.increaseItemQuantity(increaseItemQuantityRequest);
             return new ResponseEntity<>(newValue, HttpStatus.ACCEPTED);
         }catch(Exception error){
             return new ResponseEntity<>(new ApiResponse(error.getMessage(), false), HttpStatus.BAD_REQUEST);

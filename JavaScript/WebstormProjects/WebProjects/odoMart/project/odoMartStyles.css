@@ -13,6 +13,7 @@
     --section-padding: 20px 20px;
     --border-style: 2px solid black;
     --footer-color:#D3D3D3;
+    --universal-padding: 50px 70px;
 }
 body{
     background-color: #FFFFFF;
@@ -25,7 +26,7 @@ body{
     position: fixed;
     top: 0;
     width: 100%;
-    height: 12%;
+    height: 18%;
     z-index: 9999;
     background-color: #FFFFFF;
 
@@ -33,7 +34,7 @@ body{
 .navElementContainer{
     /*border: 2px solid black;*/
     display: flex;
-    width: 85%;
+    width: 95%;
     margin: auto;
     justify-content: space-between;
     padding: 15px 20px;
@@ -41,16 +42,23 @@ body{
     /*padding-right: 70px;*/
     /*padding-left: 70px;*/
 }
-
+.containerForAllItemsInNav{
+    /*border: 2px solid red;*/
+    display: flex;
+    margin: auto;
+    width: 100%;
+}
 .logoAndSearch{
     /*border: 2px solid black;*/
     display: flex;
     width: 60vw;
-    justify-content: space-between;
+    justify-content: space-evenly;
     align-items: center;
+    position: relative;
+    left: 20px;
 }
 .logo{
-    /*border: 2px solid green;*/
+    border: 2px solid green;
     border-radius: 4px;
     padding: 5px 5px;
     display: flex;
@@ -63,7 +71,7 @@ body{
     font-weight: bold;
     font-style: normal;
     font-size: 18px;
-    transition: 0.2s;
+    justify-content: center;
 }
 .logo a{
     text-decoration: none;
@@ -106,62 +114,60 @@ body{
 }
 .containerForAccountAndCart{
     /*border: 2px solid black;*/
-    width: 230px;
+    width: 35%;
     margin: auto;
 }
 .accountAndCartElements{
+    /*border: 2px solid red;*/
     display: flex;
     align-items: center;
+    width: 100%;
     justify-content: space-between;
 }
-
-.account label{
-    border: 1px solid black;
-    border-radius: 20px;
-    padding: 10px 20px;
+.accountAndCartElements ul{
+    /*border: 2px solid black;*/
     display: flex;
-    text-decoration: none;
-    color: black;
-    font-family: "Roboto Mono", monospace;
-    font-optical-sizing: auto;
-    font-weight: bold;
-    font-size: 13px;
-    font-style: normal;
-    transition: 0.2s;
+    width: 80%;
+    position: relative;
+    left: 20px;
+    list-style: none;
+    justify-content: space-evenly;
 }
-.account select{
-    border: none;
-    width: 20px;
-    display: flex;
+.accountAndCartElements a{
     text-decoration: none;
     color: black;
-    font-family: "Roboto Mono", monospace;
-    font-optical-sizing: auto;
+    font-size: 14px;
     font-weight: bold;
-    font-size: 13px;
-    font-style: normal;
-    transition: 0.2s;
+    border: 1px solid black;
+    padding: 10px 10px;
+    border-radius: 40px;
+    transition: 0.4s;
+    align-items: center;
+    display: flex;
+}
+.accountAndCartElements a:hover{
+    color: green;
+    transition: 0.4s;
 }
 .account label a:hover{
     color: green;
     transition: 0.4s;
 }
 
-.shoppingCart span{
-    border: 1px solid black;
-    border-radius: 20px;
-    padding: 5px 20px;
-    display: flex;
-    text-decoration: none;
-    color: black;
-    font-family: "Roboto Mono", monospace;
-    font-optical-sizing: auto;
-    font-weight: bold;
-    font-style: normal;
-    font-size: 13px;
-    transition: 0.2s;
+.shoppingCart a{
+    border: 2px solid black;
+    border-radius: 10px;
+    width: 100%;
 }
+.shoppingCart span{
+    /*width: 50px;*/
+}
+.shoppingCart img{
+    padding: 5px 5px;
+    border: none;
+    width: 30px;
 
+}
 
 .slideShow-container{
     width: 50vw;
@@ -359,6 +365,7 @@ body{
     height: 10vh;
 }
 .descriptionElements{
+    /*border: 2px solid black;*/
     width: 100%;
     height: auto;
     margin: auto;
@@ -367,7 +374,7 @@ body{
 }
 
 .addToCartBtn{
-    border: 1px solid black;
+    border: 1px solid yellowgreen;
     border-radius: 40px;
     align-items: center;
     display: flex;
@@ -385,6 +392,10 @@ body{
 }
 .addToCartBtn:hover{
     background-color: yellowgreen;
+    transition: 0.4s;
+}
+.addToCartBtn a:hover{
+    color: white;
     transition: 0.4s;
 }
 /*Our Partners*/
@@ -506,6 +517,7 @@ body{
     width: var(--section-width);
     margin: auto;
     display: flex;
+    padding: 10px 10px;
     justify-content: space-between;
 }
 .alreadyHaveAnAccount{
@@ -623,8 +635,8 @@ body{
     font-weight: bolder;
 }
 .createAccountElementBtn{
-    border: 2px solid black;
-    border-radius: 40px;: ;
+    border: 1px solid #c7c7c7;
+    border-radius: 40px;
     padding: 15px 15px;
     width: 70%;
     margin: auto;
@@ -712,6 +724,7 @@ body{
     width: var(--section-width);
     margin: auto;
     display: flex;
+    padding: 10px 10px;
     justify-content: space-between;
 }
 
@@ -763,8 +776,8 @@ body{
     border-radius: 40px;
 }
 .signInBtn{
-    border: 2px solid black;
-    width: 60%;
+    border: 1px solid #c7c7c7;
+    width: 64%;
     border-radius: 40px;
     margin: auto;
     padding: 0;
@@ -822,4 +835,235 @@ body{
 }
 .hrLine{
     border: none;
+}
+
+/* Product Listing */
+.productListingArea{
+    /*border: 2px solid red;*/
+    margin-top: 7.8%;
+    padding: var(--universal-padding);
+
+}
+.productListingBody{
+    background-color: #E5E4E2;
+}
+.productListingAreaContainer{
+    /*border: 2px solid blue;*/
+    display: flex;
+    justify-content: space-between;
+}
+.sidePaneContainer{
+    /*border: 1px solid black;*/
+    width: 25vw;
+    height: auto;
+}
+.sidePaneBody{
+    background-color: white;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1),
+    0 6px 20px rgba(0, 0, 0, 0.1);
+}
+.sidePaneForCategory{
+    border-bottom: 1px solid black;
+    padding: 10px 10px;
+}
+.categoryMainContainer{
+    /*border: 2px solid red;*/
+}
+.productDisplayAreaBody{
+    background-color: white;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1),
+    0 6px 20px rgba(0, 0, 0, 0.1);
+}
+.categoryContainer ul{
+    list-style: none;
+}
+.categoryContainer a{
+    text-decoration: none;
+    color: black;
+}
+.categoryContainerPadding{
+     padding: 15px 10px;
+}
+
+/* products view */
+
+.productDisplayArea{
+    /*border: 2px solid black;*/
+    width: 65%;
+}
+.displayRow{
+    /*border: 2px solid black;*/
+    height: 60vh;
+    padding-top: 20px;
+    padding-bottom: 20px;
+    display: flex;
+    justify-content: space-evenly;
+}
+.description{
+    padding: 5px 5px;
+}
+.price{
+    padding: 5px 5px;
+}
+.ratingStars{
+    border: 2px solid black;
+    display: flex;
+    padding: 10px 10px;
+    /*width: 24%;*/
+    /*height: 20px;*/
+}
+.ratingStars span{
+    color: orange;
+}
+/*.addToCartBtn{*/
+/*    border: 1px solid yellowgreen;*/
+/*}*/
+.addToCartBtn a{
+    text-decoration: none;
+}
+/*.displayRow2{*/
+/*    !*border: 2px solid black;*!*/
+/*    height: 60vh;*/
+/*    display: flex;*/
+/*    padding-top: 20px;*/
+/*    justify-content: space-evenly;*/
+/*}*/
+.productShowGlass{
+    border: 2px solid black;
+    width: 211px;
+    /*display: flex;*/
+    /*flex-direction: column;*/
+}
+.productShowGlass img{
+    width: 210px;
+    height: 215px;
+    border: 1px solid black;
+}
+.productDescriptionArea{
+    width: 210px;
+    /*height: 200px;*/
+    border: 1px solid red;
+}
+/* Shopping Cart */
+
+.cartAreaContainer{
+    border: 2px solid black;
+    margin-top: 10%;
+    height: 70vh;
+}
+
+.cartArea{
+    border: 2px solid red;
+    width: 90vw;
+    margin: auto;
+}
+
+.leftSideForItemsDisplayedContainer{
+    border: 2px solid black;
+    width: 60%;
+}
+.leftSideItemsDisplayArea{
+    border: 2px solid black;
+    width: 100%;
+    display: flex;
+    /*heigth: ;*/
+}
+.itemImageContainer{
+    border: 2px solid black;
+    width:30%;
+}
+.imageArea{
+    border: 2px solid black;
+}
+.productItemTitle{
+    border: 2px solid black;
+    width: 60%;
+}
+.productTextArea{
+    border: 2px solid black;
+    width: 100%;
+}
+.deliveryStatus span{
+    color: green;
+}
+
+/* Home in session Styles */
+
+.myProfileIconContainer{
+    /*border: var(--border-style);*/
+    position: relative;
+    right: 5%;
+}
+
+.containerForAccountAndCartForHomeInSessionPage{
+    width: 35%;
+    margin: auto;
+    /*border: 2px solid red;*/
+}
+.accountAndCartElementsForHomeInSessionPage{
+    /*border: 2px solid red;*/
+    display: flex;
+    align-items: center;
+    width: 100%;
+    justify-content: space-between;
+}
+
+.accountAndCartElementsForHomeInSessionPage ul{
+    /*border: 2px solid black;*/
+    display: flex;
+    width: 75%;
+    position: relative;
+    left: 10px;
+    list-style: none;
+    justify-content: space-evenly;
+}
+.accountAndCartElementsForHomeInSessionPage a{
+    text-decoration: none;
+    color: black;
+    font-size: 14px;
+    font-weight: bold;
+    border: 1px solid black;
+    padding: 10px 10px;
+    border-radius: 40px;
+    transition: 0.4s;
+    align-items: center;
+    display: flex;
+}
+.accountAndCartElementsForHomeInSessionPage a:hover{
+    color: green;
+    transition: 0.4s;
+}
+
+/* Home-in-session Hero section */
+
+.heroSectionOfInSessionPage{
+    /*border: 2px solid black;*/
+    height:auto;
+    padding: 40px 40px;
+    margin-top: 5%;
+}
+.heroContainerOfInSessionPage{
+    width: 90vw;
+    height:auto;
+    margin: auto;
+    /*border: 2px solid black;*/
+}
+.heroContainerOfInSessionPage img{
+    width: 90vw;
+    height:80vh;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-attachment: fixed;
+    /*border: 2px solid black;*/
+}
+.heroImageOfHomeInSession{
+    width: 90vw;
+    height: 80vh; /* Adjust this as needed */
+    margin: auto;
+    background-image: url('./assets/bannerImages/Brown_Modern_Big_Sale_Banner.png');
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-attachment: fixed;
 }

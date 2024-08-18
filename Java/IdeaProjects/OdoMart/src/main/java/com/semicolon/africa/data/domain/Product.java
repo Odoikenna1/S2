@@ -7,11 +7,13 @@ import org.springframework.data.mongodb.core.mapping.Document;
 import java.math.BigDecimal;
 
 @Data
-@Document
+@Document(collection="products")
 public class Product {
     @Id
     private String id;
+    private String sellerId;
     private String name;
+    private Category category;
     private BigDecimal price;
     private int stock;
 }

@@ -1,0 +1,518 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>OdoMart</title>
+    <link rel="stylesheet" href="odoMartStyles.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400..900;1,400..900&family=Roboto+Mono:ital,wght@0,100..700;1,100..700&display=swap" rel="stylesheet">
+</head>
+<body>
+<header class="navHeader">
+    <div class="navContainer borderStyles">
+        <div class="navElementContainer">
+            <div class="containerForAllItemsInNav">
+                <div class="logoAndSearch">
+                    <div class="logo">
+                        <h3><a href="home.html">ODOMART</a></h3>
+                    </div>
+                    <div class="inputContainer">
+                        <input type="text" placeholder="Search products, brand and categories">
+                        <span><a href="#">Search</a></span>
+                    </div>
+                </div>
+                <div class="containerForAccountAndCartForHomeInSessionPage">
+                    <div class="accountAndCartElementsForHomeInSessionPage">
+                        <ul class="accountMenuList">
+                            <li id="logOutBtn"><a href="#">Log out</a></li>
+                            <li><a href="#">My orders</a></li>
+                        </ul>
+                        <div class="myProfileIconContainer">
+                            <span><a href="dashboard.html"><img src="./assets/icons/profile_icon.png" alt=""></a></span>
+                        </div>
+                        <div class="shoppingCart">
+                            <span><a href="shoppingCart.html"><img src="./assets/extraImages/smallercart_green.svg" alt=""></a></span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</header>
+<section class="heroSectionOfInSessionPage borderStyles">
+    <div class="heroContainerOfInSessionPage">
+        <div class="heroImageOfHomeInSession">
+
+        </div>
+    </div>
+    <div class="categoryIntro">
+        <div class="introContainer">
+            <div class="introHeading">
+                <h4>Explore Popular Categories</h4>
+            </div>
+            <div class="containerHoldingCategoryDisplay">
+                <div class="category1 catStyle">
+                    <img src="./assets/categoryImages/1.png" alt="">
+                    <div class="titleContainer">
+                        <div class="title"><h3>Luxury</h3></div>
+                    </div>
+                </div>
+                <div class="category2 catStyle">
+                    <img src="./assets/categoryImages/perfume.png" alt="">
+                    <div class="titleContainer">
+                        <div class="title"><h3>Perfume</h3></div>
+                    </div>
+                </div>
+                <div class="category3 catStyle">
+                    <img src="./assets/categoryImages/sneaker_1.png" alt="">
+                    <div class="titleContainer">
+                        <div class="title"><h3>Shoes</h3></div>
+                    </div>
+                </div>
+                <div class="category4 catStyle">
+                    <img src="./assets/categoryImages/cosmetics.png" alt="">
+                    <div class="titleContainer">
+                        <div class="title"><h3>Cosmetics</h3></div>
+                    </div>
+                </div>
+                <div class="category5 catStyle">
+                    <img src="./assets/categoryImages/watches.png" alt="">
+                    <div class="titleContainer">
+                        <div class="title"><h3>Watches</h3></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</section>
+
+<section class="section2">
+    <div class="productDisplaySection1">
+        <div class="productListingCategory">
+            <div class="headingResizer">
+                <div class="introHeading">
+                    <h4>Based On Popular Demand</h4>
+                </div>
+            </div>
+        </div>
+        <div class="productContainer">
+            <div class="product1 productBorders productImageSize">
+                <div class=" productBorders">
+                    <img src="./assets/products/bagpacks.png" alt="">
+                    <div class="descriptionContainer productBorders">
+                        <div class="descriptionElements productBorders">
+                            <div class="name">
+                                <h5>Backpack</h5>
+                            </div>
+                            <div class="brand">
+                                <h5>Puma</h5>
+                            </div>
+                            <div class="price">
+                                <h5>Price: ${price}</h5>
+                            </div>
+                            <div class="addToCartBtn"><a href="#"><span>Add to cart</span></a></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="product1 productBorders productImageSize">
+                <div class=" productBorders">
+                    <img src="./assets/products/bodywash.png" alt="">
+                    <div class="descriptionContainer productBorders">
+                        <div class="descriptionElements productBorders">
+                            <div class="name">
+                                <h5>Body wash</h5>
+                            </div>
+                            <div class="brand">
+                                <h5>Aesop</h5>
+                            </div>
+                            <div class="price">
+                                <h5>Price: ${price}</h5>
+                            </div>
+                            <div class="addToCartBtn">
+                                <a href="#"><span>Add to cart</span></a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="product1 productBorders productImageSize">
+
+                <div class=" productBorders">
+                    <img src="./assets/products/handbag.png" alt="">
+                    <div class="descriptionContainer productBorders">
+                        <div class=" descriptionElements productBorders">
+                            <div class="name">
+                                <h5>Birkin Bag</h5>
+                            </div>
+                            <div class="brand">
+                                <h5>Hermes</h5>
+                            </div>
+                            <div class="price">
+                                <h5>Price: ${price}</h5>
+                            </div>
+                            <div class="addToCartBtn"><a href="#"><span>Add to cart</span></a></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="product1 productBorders productImageSize">
+                <img src="./assets/products/gadgets.png" alt="">
+                <div class="descriptionContainer productBorders">
+                    <div class="descriptionElements productBorders">
+                        <div class="name">
+                            <h5>Rail</h5>
+                        </div>
+                        <div class="brand">
+                            <h5>Skull candy</h5>
+                        </div>
+                        <div class="price">
+                            <h5>Price: ${price}</h5>
+                        </div>
+                        <div class="addToCartBtn"><a href="#"><span>Add to cart</span></a></div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <div class="productDisplaySection1 spaceDownProductContainers">
+        <div class="productContainer">
+            <div class="product1 productBorders productImageSize">
+                <img src="./assets/products/furniture.png" alt="">
+                <div class="descriptionContainer productBorders">
+                    <div class="descriptionElements productBorders">
+                        <div class="name">
+                            <h5>Velvet Couch</h5>
+                        </div>
+                        <div class="category">
+                            <h5>Stock: ${stock}</h5>
+                        </div>
+                        <div class="price">
+                            <h5>Price: ${price}</h5>
+                        </div>
+                        <div class="addToCartBtn"><a href="#"><span>Add to cart</span></a></div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="product1 productBorders productImageSize">
+                <img src="./assets/products/sippicup.png" alt="">
+                <div class="descriptionContainer productBorders">
+                    <div class="descriptionElements productBorders">
+                        <div class="name">
+                            <h5>Non-plastic sippy cup</h5>
+                        </div>
+                        <div class="stock">
+                            <h5>Stock: ${available}</h5>
+                        </div>
+                        <div class="price">
+                            <h5>Price: ${price}</h5>
+                        </div>
+                        <div class="addToCartBtn"><a href="#"><span>Add to cart</span></a></div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="product1 productBorders productImageSize">
+                <img src="./assets/products/lotion.png" alt="">
+                <div class="descriptionContainer productBorders">
+                    <div class="descriptionElements productBorders">
+                        <div class="name">
+                            <h5>Skin moisturizer</h5>
+                        </div>
+                        <div class="stock">
+                            <h5>Stock: ${available}</h5>
+                        </div>
+                        <div class="price">
+                            <h5>Price: ${price}</h5>
+                        </div>
+                        <div class="addToCartBtn"><a href="#"><span>Add to cart</span></a></div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="product1 productBorders productImageSize">
+                <img src="./assets/products/washing_machine.png" alt="">
+                <div class="descriptionContainer productBorders">
+                    <div class="descriptionElements productBorders">
+                        <div class="name">
+                            <h5>LG Washing machine</h5>
+                        </div>
+                        <div class="stock">
+                            <h5>Stock: ${available}</h5>
+                        </div>
+                        <div class="price">
+                            <h5>Price: ${price}</h5>
+                        </div>
+                        <div class="addToCartBtn"><a href="#"><span>Add to cart</span></a></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="productDisplaySection1 spaceDownProductContainers">
+        <div class="productContainer">
+
+            <div class="product1 productBorders productImageSize">
+                <img src="./assets/products/phones.png" alt="">
+                <div class="descriptionContainer productBorders">
+                    <div class="descriptionElements productBorders">
+                        <div class="name">
+                            <h5>iPhone 14 pro Max</h5>
+                        </div>
+                        <div class="category">
+                            <h5>Stock: ${stock}</h5>
+                        </div>
+                        <div class="price">
+                            <h5>Price: ${price}</h5>
+                        </div>
+                        <div class="addToCartBtn"><a href="#"><span>Add to cart</span></a></div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="product1 productBorders productImageSize">
+                <img src="./assets/products/laptops.png" alt="">
+                <div class="descriptionContainer productBorders">
+                    <div class="descriptionElements productBorders">
+                        <div class="name">
+                            <h5>Mac-book</h5>
+                        </div>
+                        <div class="stock">
+                            <h5>Stock: ${available}</h5>
+                        </div>
+                        <div class="price">
+                            <h5>Price: ${price}</h5>
+                        </div>
+                        <div class="addToCartBtn"><a href="#"><span>Add to cart</span></a></div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="product1 productBorders productImageSize">
+                <img src="./assets/products/vrHeadGear.png" alt="">
+                <div class="descriptionContainer productBorders">
+                    <div class="descriptionElements productBorders">
+                        <div class="name">
+                            <h5>ABC Vr Head Gear</h5>
+                        </div>
+                        <div class="stock">
+                            <h5>Stock: ${available}</h5>
+                        </div>
+                        <div class="price">
+                            <h5>Price: ${price}</h5>
+                        </div>
+                        <div class="addToCartBtn"><a href="#"><span>Add to cart</span></a></div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="product1 productBorders productImageSize">
+                <img src="./assets/products/laptops%202.png" alt="">
+                <div class="descriptionContainer productBorders">
+                    <div class="descriptionElements productBorders">
+                        <div class="name">
+                            <h5>Mac-Book pro</h5>
+                        </div>
+                        <div class="stock">
+                            <h5>Stock: ${available}</h5>
+                        </div>
+                        <div class="price">
+                            <h5>Price: ${price}</h5>
+                        </div>
+                        <div class="addToCartBtn"><a href="#"><span>Add to cart</span></a></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="productDisplaySection1 spaceDownProductContainers">
+        <div class="productListingCategory"><span></span></div>
+        <div class="productContainer">
+
+            <div class="product1 productBorders productImageSize">
+                <img src="./assets/products/fancyPurse.png" alt="">
+                <div class="descriptionContainer productBorders">
+                    <div class="descriptionElements productBorders">
+                        <div class="name">
+                            <h5>Hermes Purse</h5>
+                        </div>
+                        <div class="category">
+                            <h5>Stock: ${stock}</h5>
+                        </div>
+                        <div class="price">
+                            <h5>Price: ${price}</h5>
+                        </div>
+                        <div class="addToCartBtn"><a href="#"><span>Add to cart</span></a></div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="product1 productBorders productImageSize">
+                <img src="./assets/products/fragrance.png" alt="">
+                <div class="descriptionContainer productBorders">
+                    <div class="descriptionElements productBorders">
+                        <div class="name">
+                            <h5>Scent by Generic</h5>
+                        </div>
+                        <div class="stock">
+                            <h5>Stock: ${available}</h5>
+                        </div>
+                        <div class="price">
+                            <h5>Price: ${price}</h5>
+                        </div>
+                        <div class="addToCartBtn"><a href="#"><span>Add to cart</span></a></div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="product1 productBorders productImageSize">
+                <img src="./assets/products/furniture%202.png" alt="">
+                <div class="descriptionContainer productBorders">
+                    <div class="descriptionElements productBorders">
+                        <div class="name">
+                            <h5>Vegan Couch</h5>
+                        </div>
+                        <div class="stock">
+                            <h5>Stock: ${available}</h5>
+                        </div>
+                        <div class="price">
+                            <h5>Price: ${price}</h5>
+                        </div>
+                        <div class="addToCartBtn"><a href="#"><span>Add to cart</span></a></div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="product1 productBorders productImageSize">
+                <img src="./assets/categoryImages/2.png" alt="">
+                <div class="descriptionContainer productBorders">
+                    <div class="descriptionElements productBorders">
+                        <div class="name">
+                            <h5>Christian Louboutin</h5>
+                        </div>
+                        <div class="stock">
+                            <h5>Stock: ${available}</h5>
+                        </div>
+                        <div class="price">
+                            <h5>Price: ${price}</h5>
+                        </div>
+                        <div class="addToCartBtn"><a href="#"><span>Add to cart</span></a></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</section>
+
+<section class="section3">
+    <div class="ourPartners">
+        <div class="containerForOurPartners">
+            <div class="partnerHeading">
+                <div class="headingContainer">
+                    <h3>Our Partners</h3>
+                </div>
+
+            </div>
+            <div class="brands">
+
+                <div class="brandSpace room">
+                    <div class="brandContainer">
+                        <img src="./assets/ourPartners/walmart.svg" alt="">
+                    </div>
+                </div>
+
+
+                <div class="brandSpace room safewayResized">
+                    <div class="brandContainer2">
+                        <img src="./assets/ourPartners/safeway.svg" alt="">
+                    </div>
+                </div>
+                <div class="brandSpace room">
+                    <div class="brandContainer3">
+                        <img src="./assets/ourPartners/supertarget.svg" alt="">
+                    </div>
+                </div>
+                <div class="brandSpace room">
+                    <div class="brandContainer3">
+                        <img src="./assets/ourPartners/saudi-national-bank-logo.svg" alt="">
+                    </div>
+                </div>
+                <div class="brandSpace room">
+                    <div class="brandContainer3">
+                        <img src="./assets/ourPartners/trader-joe-s.svg" alt="">
+                    </div>
+                </div>
+                <div class="brandSpace room">
+                    <div class="brandContainer3">
+                        <img src="./assets/ourPartners/current-kroger-logo.svg" alt="">
+                    </div>
+                </div>
+                <div class="brandSpace room">
+                    <div class="brandContainer3">
+                        <img src="./assets/ourPartners/suez-canal-bank-logo.svg" alt="">
+                    </div>
+                </div>
+                <div class="brandSpace room">
+                    <div class="brandContainer3">
+                        <img src="./assets/ourPartners/whole-foods-market.svg" alt="">
+                    </div>
+                </div>
+                <div class="brandSpace room">
+                    <div class="brandContainer3">
+                        <img src="./assets/ourPartners/winn-dixie.svg" alt="">
+                    </div>
+                </div>
+                <div class="brandSpace room">
+                    <div class="brandContainer3">
+                        <img src="./assets/ourPartners/food-4-less.svg" alt="">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<section class="section4"></section>
+<section class="section5"></section>
+<section class="section6"></section>
+<section class="section7"></section>
+<section class="section8"></section>
+<footer class="homePageFooter">
+    <div class="footer">
+        <div class="footerContainer">
+            <div class="footerElements">
+                <div class="footerLogo">
+                    <h3>ODOMART</h3>
+                    <span>Copyright <span>&#169;</span> 2024 OdoMart.ng</span>
+                </div>
+                <ul class="footerMenuStyles">
+                    <li><a href="#">Home</a></li>
+                    <li><a href="#">FAQ</a></li>
+                    <li><a href="#">eWallet</a></li>
+                    <li><a href="#">Opportunities</a></li>
+                    <li><a href="#">Blog</a></li>
+                    <li><a href="#">Contact</a></li>
+                    <li><a href="#">Privacy</a></li>
+                    <li><a href="#">Terms</a></li>
+                    <li><a href="#">Corporate Orders</a></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</footer>
+<script src="odoMartScripts.js"></script>
+<script src="productListing.js"></script>
+<script src="logOut.js"></script>
+</body>
+</html>

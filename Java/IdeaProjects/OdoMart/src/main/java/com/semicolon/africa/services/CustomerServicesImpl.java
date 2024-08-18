@@ -1,53 +1,52 @@
 package com.semicolon.africa.services;
 
+import com.semicolon.africa.data.domain.BillingInformation;
 import com.semicolon.africa.data.domain.ShoppingCart;
-import com.semicolon.africa.data.models.Customer;
-import com.semicolon.africa.data.models.User;
-import com.semicolon.africa.data.repositories.UserRepository;
-import com.semicolon.africa.dtos.request.LogInRequest;
-import com.semicolon.africa.dtos.request.RegisterUserAuthenticationRequest;
+import com.semicolon.africa.data.repositories.BillingInformationRepository;
+import com.semicolon.africa.dtos.request.AddToCartRequest;
+import com.semicolon.africa.dtos.request.CheckOutRequest;
+import com.semicolon.africa.dtos.request.SetUpBillingInformationRequest;
+import com.semicolon.africa.dtos.response.AddToCartResponse;
+import com.semicolon.africa.dtos.response.CheckOutResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 @Service @RequiredArgsConstructor
 public class CustomerServicesImpl implements CustomerServices{
 
-    private final UserRepository userRepository;
-    private final CartServicesImpl cartServicesImpl;
+    private final BillingInformationRepository billingInformationRepository;
+    private final CartServices cartServices;
+    private final OrderServices orderServices;
+
 
     @Override
-    public User registerCustomer(RegisterUserAuthenticationRequest registerUserAuthenticationRequest) {
-        Customer newCustomer = new Customer();
-        ShoppingCart newCart = new ShoppingCart();
-        newCustomer.setFirstName(registerUserAuthenticationRequest.getFirstName());
-        newCustomer.setLastName(registerUserAuthenticationRequest.getLastName());
-        newCustomer.setUserName(registerUserAuthenticationRequest.getUserName());
-        newCustomer.setCreditCard(registerUserAuthenticationRequest.getCreditCardInfo());
-        newCustomer.setBillingAddress(registerUserAuthenticationRequest.getAddress());
-        newCustomer.setGender(registerUserAuthenticationRequest.getGender());
-        newCustomer.setSessionStatus(registerUserAuthenticationRequest.getSessionStatus());
-        newCustomer.setDateOfBirth(registerUserAuthenticationRequest.getDateOfBirth());
-        newCustomer.setRole(registerUserAuthenticationRequest.getRole());
-        Customer customerSaved = userRepository.save(newCustomer);
-        newCart.setUserId(customerSaved.getId());
-        cartServicesImpl.saveCart(newCart);
-        return customerSaved;
+    public AddToCartResponse addToCart(AddToCartRequest addToCartRequest) {
+        return cartServices.addToCart(addToCartRequest);
     }
 
     @Override
-    public Customer findCustomerBy(String customerId) {
-        Customer customerFound =  (Customer) userRepository.findUserById(customerId);
-        return customerFound;
+    public BillingInformation setupBillingInformation(SetUpBillingInformationRequest setupBillingInformationRequest) {
+        BillingInformation billingInformation = new BillingInformation();
+        billingInformation.setBillingAddress(setupBillingInformationRequest.getBillingAddress());
+        billingInformation.setCountry(setupBillingInformationRequest.getCountry());
+        billingInformation.setNationality(setupBillingInformationRequest.getNationality());
+        billingInformation.setPhoneNumber(setupBillingInformationRequest.getPhoneNumber());
+        billingInformation.setUserId(setupBillingInformationRequest.getUserId());
+        billingInformation.setZipCode(setupBillingInformationRequest.getZipCode());
+        BillingInformation savedBillingInfo = billingInformationRepository.save(billingInformation);
+        return savedBillingInfo;
     }
 
     @Override
-    public boolean validateCustomer(LogInRequest logInRequest) {
-        Customer customerFound = findCustomerBy(logInRequest.getUserId());
-        boolean userEmail = customerFound.getEmail().equals(logInRequest.getEmail());
-        boolean passwordIsCorrect =  customerFound.getPassword().equals(logInRequest.getPassword());
-        if(userEmail && passwordIsCorrect) return true;
-        return false;
+    public ShoppingCart findCartBy(String userId) {
+        return cartServices.findCartByUserId(userId);
     }
 
-
+    @Override
+    public CheckOutResponse handleOrderRequest(CheckOutRequest checkOutRequest) {
+        BillingInformation savedBillingInformation = setupBillingInformation(checkOutRequest.getSetupBillingInformationRequest());
+        //checkOutRequest.setBillingInformation();
+        CheckOutResponse checkOutResponse=  orderServices.createAnOrder(checkOutRequest);
+        return checkOutResponse;
+    }
 }

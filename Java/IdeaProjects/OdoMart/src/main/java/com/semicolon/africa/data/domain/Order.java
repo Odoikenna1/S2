@@ -18,8 +18,9 @@ public class Order {
     private String userId;
     private BigDecimal subTotal;
     private String billingAddress;
+    private String shippingAddress;
     private PaymentMethod paymentMethod;
-    private LocalDateTime orderCreationDate;
+    private LocalDateTime orderCreationDate = LocalDateTime.now();
     private List<Item> items = new ArrayList<>();
     private OrderStatus status;
 }

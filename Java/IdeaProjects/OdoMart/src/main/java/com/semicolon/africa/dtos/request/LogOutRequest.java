@@ -8,5 +8,5 @@ import lombok.Setter;
 @Getter
 public class LogOutRequest {
     private String userId;
-    private SessionStatus sessionStatus;
+    private boolean isLoggedIn;
 }

@@ -1,8 +1,10 @@
 package com.semicolon.africa.data.services;
 
+import com.semicolon.africa.Exceptions.UserAlreadyExistsException;
 import com.semicolon.africa.data.domain.*;
-import com.semicolon.africa.data.models.User;
+import com.semicolon.africa.data.repositories.OrderRepository;
 import com.semicolon.africa.data.repositories.ProductRepository;
+import com.semicolon.africa.data.repositories.UserRepository;
 import com.semicolon.africa.dtos.request.*;
 import com.semicolon.africa.dtos.response.*;
 import com.semicolon.africa.services.*;
@@ -14,11 +16,11 @@ import org.springframework.boot.test.context.SpringBootTest;
 import java.math.BigDecimal;
 import java.util.List;
 
-import static com.semicolon.africa.data.domain.Gender.MALE;
 import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 @SpringBootTest
 class UserServicesTest {
@@ -38,204 +40,322 @@ class UserServicesTest {
     private OrderServices orderServices;
 
     @Autowired
-    private ProductRepository productRepo;
-    private InitializeProductRequest initializeProductRequest;
-    RegisterUserAuthenticationRequest signUpRequest;
-    RegisterResponse response;
+    private CustomerServices customerServices;
+
+    @Autowired
+    private PaymentServices paymentServices;
+
+
+
+    @Autowired
+    RegisterUserRequest signUpRequest;
+    UserSignUpResponse response;
+    CustomerServicesImpl customerServicesImpl;
+    @Autowired
+    private UserRepository userRepository;
+    @Autowired
+    private ProductRepository productRepository;
+    private OrderRepository orderRepository;
 
 
     @BeforeEach
     void setUpRegisterUserAuthentication(){
-        cartServices.deleteAll();
-        productRepo.deleteAll();
-        signUpRequest = new RegisterUserAuthenticationRequest();
+        userRepository.deleteAll();
+        signUpRequest = new RegisterUserRequest();
         signUpRequest.setFirstName("David");
         signUpRequest.setLastName("Ezeodo");
-        signUpRequest.setGender(MALE);
-        signUpRequest.setAddress("No1 Ezeodo close");
-        signUpRequest.setDateOfBirth("05/06/1997");
         signUpRequest.setEmailAddress("xyz@gmail.com");
         signUpRequest.setPassword("1234");
         signUpRequest.setRole(Role.CUSTOMER);
-        signUpRequest.setSessionStatus(SessionStatus.LOGGED_IN);
 
          response = userService.signUp(signUpRequest);
 
         assertThat(response.getFirstName(), is("David"));
         assertEquals("David your account has been created successfully.", response.getMessage());
-
-
     }
+
     @Test
     void test_that_CustomerIsSaved(){
         assertThat(response.getFirstName(), is("David"));
         assertEquals("David your account has been created successfully.", response.getMessage());
         System.out.println(response.getUserId());
+        //asserT
     }
 
+    @Test
+    void test_ThatUserCartIsCreated_WhenUserIsCreated(){
+        assertThat(response.getShoppingCartId(), is(notNullValue()));
+    }
+    @Test
+    void testThat_UserId_Is_SetAfterUserIsSaved(){
+        assertThat(response.getUserId(), is(notNullValue()));
+    }
+    @Test
+    void testThat_theUserCartCanBeFoundByUserId(){
+        ShoppingCart cartFound = cartServices.findCartByUserId(response.getUserId());
+        assertThat(cartFound, is(notNullValue()));
+    }
+    @Test
+    void test_ThatExceptionIsThrown_When_UserRegistersWithAnEmail_ThatAlreadyExists(){
+        assertThat(response.getFirstName(), is("David"));
+        assertEquals("David your account has been created successfully.", response.getMessage());
+        System.out.println(response.getUserId());
+
+        signUpRequest = new RegisterUserRequest();
+        signUpRequest.setFirstName("David");
+        signUpRequest.setLastName("Ezeodo");
+        signUpRequest.setEmailAddress("xyz@gmail.com");
+        signUpRequest.setPassword("1234");
+        signUpRequest.setRole(Role.CUSTOMER);
+
+        assertThrows(UserAlreadyExistsException.class, () -> userService.signUp(signUpRequest));
+    }
+    @Test
+    void test_thatUserCanCreateA_Product(){
+        CreateProductRequest createProductRequest = new CreateProductRequest();
+        createProductRequest.setName("Washing machine");
+        createProductRequest.setPrice(BigDecimal.valueOf(185600));
+        createProductRequest.setCategory(Category.HOME_APPLIANCES);
+        createProductRequest.setStock(50);
+        Product savedProduct = productServices.addProduct(createProductRequest);
+        assertThat(savedProduct, is(notNullValue()));
+
+        CreateProductRequest createProductRequest2 = new CreateProductRequest();
+        createProductRequest2.setName("Gucci slides");
+        createProductRequest2.setPrice(BigDecimal.valueOf(86000));
+        createProductRequest2.setCategory(Category.FASHION);
+        createProductRequest.setStock(100);
+        Product savedProduct2 = productServices.addProduct(createProductRequest2);
+        assertThat(savedProduct2, is(notNullValue()));
+
+        CreateProductRequest createProductRequest3 = new CreateProductRequest();
+        createProductRequest3.setName("Mac book pro");
+        createProductRequest3.setPrice(BigDecimal.valueOf(2_535_050));
+        createProductRequest3.setCategory(Category.GADGETS);
+        createProductRequest3.setStock(80);
+        Product savedProduct3 = productServices.addProduct(createProductRequest3);
+        assertThat(savedProduct3, is(notNullValue()));
+
+        CreateProductRequest createProductRequest4 = new CreateProductRequest();
+        createProductRequest4.setName("Hermes Birkin bag");
+        createProductRequest4.setPrice(BigDecimal.valueOf(1_200_8500));
+        createProductRequest4.setCategory(Category.FASHION);
+        createProductRequest4.setStock(90);
+        Product savedProduct4 = productServices.addProduct(createProductRequest4);
+        assertThat(savedProduct4, is(notNullValue()));
+    }
     @Test
     void testThat_UserCan_AddItemToAnEmptyCart(){
 
-//        User sends an add to cart request
-        AddToCartRequest addToCartRequest = new AddToCartRequest();
+//        Pre-requisites:
+//        Given that a user exists, a cart has a user
+//        and given that products exist In the database
 
-//        The request has an Item, quantity and userId
-        InitializeProductRequest initializeProductRequest1 = new InitializeProductRequest();
-        initializeProductRequest1.setName("Miniso: mouse");
-        initializeProductRequest1.setPrice(BigDecimal.valueOf(500));
-        Product savedProduct = productServices.addProduct(initializeProductRequest1);
+        ShoppingCart userCartFound = cartServices.findCartByUserId(response.getUserId());
+        assertThat(userCartFound, is(notNullValue()));
+        assertThat(userCartFound.getItems().size(), is(0));
+
+//        Action:
+//        A user can search and add items to cart
+        SearchProductRequest searchProductRequest = new SearchProductRequest();
+        searchProductRequest.setProductName("Gucci slides");
+
+        ProductFoundResponse productFoundResponse= productServices.findProductBy(searchProductRequest);
+        Product productFound= productFoundResponse.getProduct();
+        assertThat(productFound, is(notNullValue()));
 
         InitializeItemRequest initializeItemRequest = new InitializeItemRequest();
-        initializeItemRequest.setPrice(savedProduct.getPrice());
-        initializeItemRequest.setProduct(savedProduct);
-        initializeItemRequest.setQuantity(5);
+        initializeItemRequest.setQuantity(4);
+        initializeItemRequest.setPrice(productFound.getPrice());
+        initializeItemRequest.setCartId(userCartFound.getId());
+        initializeItemRequest.setProduct(productFound);
+
         Item initializedItem = itemServices.initializeItem(initializeItemRequest);
 
+        AddToCartRequest addToCartRequest = new AddToCartRequest();
         addToCartRequest.setItem(initializedItem);
         addToCartRequest.setQuantity(initializedItem.getQuantity());
         addToCartRequest.setUserId(response.getUserId());
-//        we want to add the item to the user's cart
 
         AddToCartResponse addToCartResponse = cartServices.addToCart(addToCartRequest);
-        assertThat(addToCartResponse.getItemListSize()
-                , is(1));
-//        The cart belonging to the user who sent the request can be found
-//        The item can be added to the cart (arrayList) according the quantity of the items specified
-
-    }
-    @Test
-    void that_ListOfItems_is2_afterAnItemIs_added(){
-
-//        User sends an add to cart request
-        AddToCartRequest addToCartRequest = new AddToCartRequest();
-
-//        The request has an Item, quantity and userId
-        InitializeProductRequest initializeProductRequest1 = new InitializeProductRequest();
-        initializeProductRequest1.setName("Kitchen Utensil: spatula");
-        initializeProductRequest1.setPrice(BigDecimal.valueOf(12000));
-        Product savedProduct = productServices.addProduct(initializeProductRequest1);
-
-        InitializeItemRequest initializeItemRequest = new InitializeItemRequest();
-        initializeItemRequest.setPrice(savedProduct.getPrice());
-        initializeItemRequest.setProduct(savedProduct);
-        initializeItemRequest.setQuantity(6);
-        Item initializedItem = itemServices.initializeItem(initializeItemRequest);
-
-        addToCartRequest.setItem(initializedItem);
-        addToCartRequest.setQuantity(initializedItem.getQuantity());
-        addToCartRequest.setUserId(response.getUserId());
-        System.out.println(response.getUserId());
-
-        AddToCartResponse addToCartResponse = cartServices.addToCart(addToCartRequest);
+//      Assert that the customer's shopping cart list of item size is 1 after an item has been added
         assertThat(addToCartResponse.getItemListSize(), is(1));
 
-        //        User sends an add to cart request
-        AddToCartRequest addToCartRequest2 = new AddToCartRequest();
-
-//        The request has an Item, quantity and userId
-        InitializeProductRequest initializeProductRequest2 = new InitializeProductRequest();
-        initializeProductRequest2.setName("HouseHold: Detergent");
-        initializeProductRequest2.setPrice(BigDecimal.valueOf(2600));
-        Product savedProduct2 = productServices.addProduct(initializeProductRequest2);
-
-        InitializeItemRequest initializeItemRequest2 = new InitializeItemRequest();
-        initializeItemRequest2.setPrice(savedProduct2.getPrice());
-        initializeItemRequest2.setProduct(savedProduct2);
-        initializeItemRequest2.setQuantity(4);
-        Item initializedItem2 = itemServices.initializeItem(initializeItemRequest2);
-
-        addToCartRequest2.setItem(initializedItem2);
-        addToCartRequest2.setQuantity(initializedItem2.getQuantity());
-        addToCartRequest2.setUserId(response.getUserId());
-
-        AddToCartResponse addToCartResponse2 = cartServices.addToCart(addToCartRequest2);
-        assertThat(addToCartResponse2.getItemListSize(), is(2));
-
-        RemoveItemFromCartRequest removeItemFromCartRequest = new RemoveItemFromCartRequest();
-        removeItemFromCartRequest.setItem(initializedItem);
-        removeItemFromCartRequest.setUserId(response.getUserId());
-        List<Item> updatedListOfItems = cartServices.removeItemFromCart(removeItemFromCartRequest);
-
-        assertThat(updatedListOfItems.size(), is(1));
-
     }
-
     @Test
-    void test_That_ListSizeIs_2_After_1_ItemOutOf2_IsRemove_And1IsAdded(){
+    void test_that_ListOfItems_is2_After_Adding2_Items(){
 
-//        User sends an add to cart request
-        AddToCartRequest addToCartRequest1 = new AddToCartRequest();
+//        Pre-requisites:
+//        Given that a user exists, a cart has a user
+//        and given that products exist In the database
 
-//        Creating the first item
-        InitializeProductRequest initializeProductRequest1 = new InitializeProductRequest();
-        initializeProductRequest1.setName("Electronics: PlayStation 5");
-        initializeProductRequest1.setPrice(BigDecimal.valueOf(680400));
-        Product savedProduct = productServices.addProduct(initializeProductRequest1);
+        ShoppingCart userCartFound = cartServices.findCartByUserId(response.getUserId());
+        assertThat(userCartFound, is(notNullValue()));
+        assertThat(userCartFound.getItems().size(), is(0));
 
+//        Action:
+//        A user can search for items and add them to cart
+//        Search for first product (product1)
+        SearchProductRequest searchProductRequest1 = new SearchProductRequest();
+        searchProductRequest1.setProductName("Gucci slides");
+
+        ProductFoundResponse productFoundResponse = productServices.findProductBy(searchProductRequest1);
+        Product productFound1 = productFoundResponse.getProduct();
+        assertThat(productFound1, is(notNullValue()));
+
+//        Setup Initialize item request of item1 for item Services
         InitializeItemRequest initializeItemRequest1 = new InitializeItemRequest();
-        initializeItemRequest1.setPrice(savedProduct.getPrice());
-        initializeItemRequest1.setProduct(savedProduct);
-        initializeItemRequest1.setQuantity(6);
-        Item initializedItem1 = itemServices.initializeItem(initializeItemRequest1);
+        initializeItemRequest1.setQuantity(4);
+        initializeItemRequest1.setPrice(productFound1.getPrice());
+        initializeItemRequest1.setCartId(userCartFound.getId());
+        initializeItemRequest1.setProduct(productFound1);
 
+//       Initialize first item using item services
+        Item initializedItem1 = itemServices.initializeItem(initializeItemRequest1);
+//        Make an add to cart request
+        AddToCartRequest addToCartRequest1 = new AddToCartRequest();
+//        Set up the add to cart request
         addToCartRequest1.setItem(initializedItem1);
         addToCartRequest1.setQuantity(initializedItem1.getQuantity());
         addToCartRequest1.setUserId(response.getUserId());
+//        Pass the add to cart request of item1 to cart services
+        AddToCartResponse addToCartResponse1 = cartServices.addToCart(addToCartRequest1);
+//        Assert that user's cart list is now 1 after an item has been added to cart.
+        assertThat(addToCartResponse1.getItemListSize(), is(1));
 
-        AddToCartResponse addToCartResponse2 = cartServices.addToCart(addToCartRequest1);
-        assertThat(addToCartResponse2.getItemListSize(), is(1));
+//        Action:
+//        Search for second product (product2)
+        SearchProductRequest searchProductRequest2 = new SearchProductRequest();
+        searchProductRequest2.setProductName("Hermes Birkin bag");
 
-//        Adding second item
-        AddToCartRequest addToCartRequest2 = new AddToCartRequest();
+        ProductFoundResponse productFoundResponse1 = productServices.findProductBy(searchProductRequest2);
+        Product productFound2 = productFoundResponse1.getProduct();
+        assertThat(productFound2, is(notNullValue()));
 
-//        Creating the second item
-        InitializeProductRequest initializeProductRequest2 = new InitializeProductRequest();
-        initializeProductRequest2.setName("Fashion: Red shirt");
-        initializeProductRequest2.setPrice(BigDecimal.valueOf(680400));
-        Product savedProduct2 = productServices.addProduct(initializeProductRequest1);
-
+//        Set up the second Initialize item request of item2 for item Services
         InitializeItemRequest initializeItemRequest2 = new InitializeItemRequest();
-        initializeItemRequest2.setPrice(savedProduct2.getPrice());
-        initializeItemRequest2.setProduct(savedProduct2);
-        initializeItemRequest2.setQuantity(6);
-        Item initializedItem2 = itemServices.initializeItem(initializeItemRequest2);
+        initializeItemRequest2.setQuantity(4);
+        initializeItemRequest2.setPrice(productFound2.getPrice());
+        initializeItemRequest2.setCartId(userCartFound.getId());
+        initializeItemRequest2.setProduct(productFound2);
 
+//       Initialize second item using item services
+        Item initializedItem2 = itemServices.initializeItem(initializeItemRequest2);
+//        Make an add to cart request
+        AddToCartRequest addToCartRequest2 = new AddToCartRequest();
+//        Set up the add to cart request
         addToCartRequest2.setItem(initializedItem2);
         addToCartRequest2.setQuantity(initializedItem2.getQuantity());
         addToCartRequest2.setUserId(response.getUserId());
+//        Pass the add to cart request of item1 to cart services
+        AddToCartResponse addToCartResponse2 = cartServices.addToCart(addToCartRequest2);
+//        Assert that user's cart list is now 1 after an item has been added to cart.
+        assertThat(addToCartResponse2.getItemListSize(), is(2));
+    }
 
-        AddToCartResponse addToCartResponse3 = cartServices.addToCart(addToCartRequest1);
-        assertThat(addToCartResponse3.getItemListSize(), is(2));
+    @Test
+    void test_ThatUserCartListSizeIs_1AfterOneOutOf2ItemsIsRemoved(){
+//        Objective of test:
+//        Testing that a user can remove an item from cart after searching and adding items to cart
+
+//        Pre-requisites:
+//        Given that a user exists, a cart has a user,
+//        and given that products exist In the database.
+//        User can add to and remove items from cart
+
+//        First, test that user's cart can be found and that its empty
+        ShoppingCart userCartFound = cartServices.findCartByUserId(response.getUserId());
+        assertThat(userCartFound, is(notNullValue()));
+        assertThat(userCartFound.getItems().size(), is(0));
+
+//        Action:
+//        A user can search for items and add them to cart
+//        Search for first product (product1)
+        SearchProductRequest searchProductRequest1 = new SearchProductRequest();
+        searchProductRequest1.setProductName("Gucci slides");
+
+        ProductFoundResponse productFoundResponse1 = productServices.findProductBy(searchProductRequest1);
+        Product productFound1= productFoundResponse1.getProduct();
+        assertThat(productFound1, is(notNullValue()));
+
+//        Setup Initialize item request of item1 for item Services
+        InitializeItemRequest initializeItemRequest1 = new InitializeItemRequest();
+        initializeItemRequest1.setQuantity(4);
+        initializeItemRequest1.setPrice(productFound1.getPrice());
+        initializeItemRequest1.setCartId(userCartFound.getId());
+        initializeItemRequest1.setProduct(productFound1);
+
+//       Initialize first item using item services
+        Item initializedItem1 = itemServices.initializeItem(initializeItemRequest1);
+//        Make an add to cart request
+        AddToCartRequest addToCartRequest1 = new AddToCartRequest();
+//        Set up the add to cart request
+        addToCartRequest1.setItem(initializedItem1);
+        addToCartRequest1.setQuantity(initializedItem1.getQuantity());
+        addToCartRequest1.setUserId(response.getUserId());
+//        Pass the add to cart request of item1 to cart services
+        AddToCartResponse addToCartResponse1 = cartServices.addToCart(addToCartRequest1);
+//        Assert that user's cart list is now 1 after an item has been added to cart.
+        assertThat(addToCartResponse1.getItemListSize(), is(1));
+
+//        Action:
+//        Search for second product (product2)
+        SearchProductRequest searchProductRequest2 = new SearchProductRequest();
+        searchProductRequest2.setProductName("Hermes Birkin bag");
+
+        ProductFoundResponse productFoundResponse2 = productServices.findProductBy(searchProductRequest2);
+        Product productFound2= productFoundResponse2.getProduct();
+        assertThat(productFound2, is(notNullValue()));
+
+//        Set up the second Initialize item request of item2 for item Services
+        InitializeItemRequest initializeItemRequest2 = new InitializeItemRequest();
+        initializeItemRequest2.setQuantity(4);
+        initializeItemRequest2.setPrice(productFound2.getPrice());
+        initializeItemRequest2.setCartId(userCartFound.getId());
+        initializeItemRequest2.setProduct(productFound2);
+
+//       Initialize second item using item services
+        Item initializedItem2 = itemServices.initializeItem(initializeItemRequest2);
+//        Make an add to cart request
+        AddToCartRequest addToCartRequest2 = new AddToCartRequest();
+//        Set up the add to cart request
+        addToCartRequest2.setItem(initializedItem2);
+        addToCartRequest2.setQuantity(initializedItem2.getQuantity());
+        addToCartRequest2.setUserId(response.getUserId());
+//        Pass the add to cart request of item1 to cart services
+        AddToCartResponse addToCartResponse2 = cartServices.addToCart(addToCartRequest2);
+//        Assert that user's cart list is now 1 after an item has been added to cart.
+        assertThat(addToCartResponse2.getItemListSize(), is(2));
+
+//        Now that items have been added to cart
+//        Test that user can remove item from cart.
 
         RemoveItemFromCartRequest removeItemFromCartRequest = new RemoveItemFromCartRequest();
         removeItemFromCartRequest.setUserId(response.getUserId());
         removeItemFromCartRequest.setItem(initializedItem1);
-        List<Item> updatedListOfItems = cartServices.removeItemFromCart(removeItemFromCartRequest);
-        assertThat(updatedListOfItems.size(), is(1));
-
-        //        User sends 3rd add to cart request
-        AddToCartRequest addToCartRequest3 = new AddToCartRequest();
-
-        //        Creating third product
-        InitializeProductRequest initializeProductRequest3 = new InitializeProductRequest();
-        initializeProductRequest3.setName("Sport Apparel: Soccer ball");
-        initializeProductRequest3.setPrice(BigDecimal.valueOf(12000));
-        Product savedProduct3 = productServices.addProduct(initializeProductRequest3);
-
-        //        Creating third item
-        InitializeItemRequest initializeItemRequest3 = new InitializeItemRequest();
-        initializeItemRequest3.setPrice(savedProduct.getPrice());
-        initializeItemRequest3.setProduct(savedProduct3);
-        initializeItemRequest3.setQuantity(6);
-        Item initializedItem3 = itemServices.initializeItem(initializeItemRequest3);
-
-        addToCartRequest3.setItem(initializedItem3);
-        addToCartRequest3.setQuantity(initializedItem3.getQuantity());
-        addToCartRequest3.setUserId(response.getUserId());
-
-        AddToCartResponse addToCartResponse= cartServices.addToCart(addToCartRequest3);
-        assertThat(addToCartResponse.getItemListSize(), is(2));
+        List<Item> updatedList = cartServices.removeItemFromCart(removeItemFromCartRequest);
+        assertThat(updatedList.size(), is(1));
     }
+
+    @Test
+    void test_ThatUserCanLogOut_UserLoggedInStatusBecomesFalse_OnceLogOutRequestIsFulfilled(){
+//        Pre-requisite:
+//        Given that a use exists
+        assertThat(response.getFirstName(), is("David"));
+        assertEquals("David your account has been created successfully.", response.getMessage());
+//        Action:
+//        A log-out request is sent
+
+        LogOutRequest logOutRequest = new LogOutRequest();
+        logOutRequest.setUserId(response.getUserId());
+        userService.logOut(logOutRequest);
+//        Assert: that,
+//        his logged_in status becomes false
+        LogOutResponse logOutResponse = new LogOutResponse();
+        assertThat(logOutResponse.isLoggedIn(), is(false));
+    }
+
+
 
     @Test
     void test_That_CustomerCan_IncreaseQuantity_OfItemsInCart(){
@@ -244,10 +364,10 @@ class UserServicesTest {
         AddToCartRequest addToCartRequest1 = new AddToCartRequest();
 
 //        Creating the first item
-        InitializeProductRequest initializeProductRequest1 = new InitializeProductRequest();
-        initializeProductRequest1.setName("Electronics: PlayStation 5");
-        initializeProductRequest1.setPrice(BigDecimal.valueOf(680400));
-        Product savedProduct = productServices.addProduct(initializeProductRequest1);
+        CreateProductRequest createProductRequest1 = new CreateProductRequest();
+        createProductRequest1.setName("PlayStation 5");
+        createProductRequest1.setPrice(BigDecimal.valueOf(680400));
+        Product savedProduct = productServices.addProduct(createProductRequest1);
 
         InitializeItemRequest initializeItemRequest1 = new InitializeItemRequest();
         initializeItemRequest1.setPrice(savedProduct.getPrice());
@@ -256,7 +376,6 @@ class UserServicesTest {
         Item initializedItem1 = itemServices.initializeItem(initializeItemRequest1);
 
         addToCartRequest1.setItem(initializedItem1);
-        addToCartRequest1.setQuantity(initializedItem1.getQuantity());
         addToCartRequest1.setUserId(response.getUserId());
 
         AddToCartResponse addToCartResponse = cartServices.addToCart(addToCartRequest1);
@@ -267,8 +386,8 @@ class UserServicesTest {
         increaseItemQuantityRequest.setProductId(initializedItem1.getProduct().getId());
         increaseItemQuantityRequest.setUserId(response.getUserId());
 
-        int increasedItemQuantity = cartServices.increaseItemQuantity(increaseItemQuantityRequest);
-        assertThat(increasedItemQuantity, is(7));
+        IncreaseQuantityResponse increaseQuantityResponse = cartServices.increaseItemQuantity(increaseItemQuantityRequest);
+        assertThat(increaseQuantityResponse, is(7));
 
     }
     @Test
@@ -277,10 +396,10 @@ class UserServicesTest {
         AddToCartRequest addToCartRequest1 = new AddToCartRequest();
 
 //        Creating the first item
-        InitializeProductRequest initializeProductRequest1 = new InitializeProductRequest();
-        initializeProductRequest1.setName("Electronics: PlayStation 5");
-        initializeProductRequest1.setPrice(BigDecimal.valueOf(680400));
-        Product savedProduct = productServices.addProduct(initializeProductRequest1);
+        CreateProductRequest createProductRequest1 = new CreateProductRequest();
+        createProductRequest1.setName("PlayStation 5");
+        createProductRequest1.setPrice(BigDecimal.valueOf(680400));
+        Product savedProduct = productServices.addProduct(createProductRequest1);
 
         InitializeItemRequest initializeItemRequest1 = new InitializeItemRequest();
         initializeItemRequest1.setPrice(savedProduct.getPrice());
@@ -310,10 +429,10 @@ class UserServicesTest {
         AddToCartRequest addToCartRequest1 = new AddToCartRequest();
 
 //        Creating the first item
-        InitializeProductRequest initializeProductRequest1 = new InitializeProductRequest();
-        initializeProductRequest1.setName("Gadget: PlayStation 5");
-        initializeProductRequest1.setPrice(BigDecimal.valueOf(680400));
-        Product savedProduct1 = productServices.addProduct(initializeProductRequest1);
+        CreateProductRequest createProductRequest1 = new CreateProductRequest();
+        createProductRequest1.setName("PlayStation 5");
+        createProductRequest1.setPrice(BigDecimal.valueOf(680400));
+        Product savedProduct1 = productServices.addProduct(createProductRequest1);
 
         InitializeItemRequest initializeItemRequest1 = new InitializeItemRequest();
         initializeItemRequest1.setPrice(savedProduct1.getPrice());
@@ -332,10 +451,10 @@ class UserServicesTest {
         AddToCartRequest addToCartRequest2 = new AddToCartRequest();
 
 //        Creating second item
-        InitializeProductRequest initializeProductRequest2 = new InitializeProductRequest();
-        initializeProductRequest2.setName("Baby Stuff: Diapers");
-        initializeProductRequest2.setPrice(BigDecimal.valueOf(680400));
-        Product savedProduct2 = productServices.addProduct(initializeProductRequest2);
+        CreateProductRequest createProductRequest2 = new CreateProductRequest();
+        createProductRequest2.setName("Diapers");
+        createProductRequest2.setPrice(BigDecimal.valueOf(680400));
+        Product savedProduct2 = productServices.addProduct(createProductRequest2);
 
         InitializeItemRequest initializeItemRequest2 = new InitializeItemRequest();
         initializeItemRequest2.setPrice(savedProduct2.getPrice());
@@ -355,10 +474,10 @@ class UserServicesTest {
         AddToCartRequest addToCartRequest3 = new AddToCartRequest();
 
 //        Creating 3rd item
-        InitializeProductRequest initializeProductRequest3 = new InitializeProductRequest();
-        initializeProductRequest3.setName("Home Appliance: Washing machine");
-        initializeProductRequest3.setPrice(BigDecimal.valueOf(30400));
-        Product savedProduct3 = productServices.addProduct(initializeProductRequest2);
+        CreateProductRequest createProductRequest3 = new CreateProductRequest();
+        createProductRequest3.setName("Washing machine");
+        createProductRequest3.setPrice(BigDecimal.valueOf(30400));
+        Product savedProduct3 = productServices.addProduct(createProductRequest2);
 
         InitializeItemRequest initializeItemRequest3 = new InitializeItemRequest();
         initializeItemRequest3.setPrice(savedProduct3.getPrice());
@@ -386,96 +505,143 @@ class UserServicesTest {
 
     @Test
     void test_That_OrderIsCreated_WhenCustomerChecksOut(){
+//      Objective:
+//        Test that an order ticket is created when our endpoint gets a create order request
+//        Pre-requisite;
+//        Given that a user exists
+        assertThat(userService.validateUserBy(response.getUserId()), is(true));
+//        the user has added item to cart
+        SearchProductRequest searchProductRequest = new SearchProductRequest();
+        searchProductRequest.setProductName("Gucci slides");
+        ProductFoundResponse productFoundResponse = productServices.findProductBy(searchProductRequest);
+        Product productFound =productFoundResponse.getProduct();
 
-//       User sends an add to cart request
-        AddToCartRequest addToCartRequest1 = new AddToCartRequest();
+        assertThat(productFound, is(notNullValue()));
 
-//        Creating the first item
-        InitializeProductRequest initializeProductRequest1 = new InitializeProductRequest();
-        initializeProductRequest1.setName("Gadget: PlayStation 5");
-        initializeProductRequest1.setPrice(BigDecimal.valueOf(680400));
-        Product savedProduct1 = productServices.addProduct(initializeProductRequest1);
+        InitializeItemRequest initializeItemRequest = new InitializeItemRequest();
+        initializeItemRequest.setProduct(productFound);
+        initializeItemRequest.setPrice(productFound.getPrice());
+        initializeItemRequest.setQuantity(5);
+        Item initializedItem = itemServices.initializeItem(initializeItemRequest);
 
-        InitializeItemRequest initializeItemRequest1 = new InitializeItemRequest();
-        initializeItemRequest1.setPrice(savedProduct1.getPrice());
-        initializeItemRequest1.setProduct(savedProduct1);
-        initializeItemRequest1.setQuantity(6);
-        Item initializedItem1 = itemServices.initializeItem(initializeItemRequest1);
+        assertThat(initializedItem, is(notNullValue()));
 
-        addToCartRequest1.setItem(initializedItem1);
-        addToCartRequest1.setQuantity(initializedItem1.getQuantity());
-        addToCartRequest1.setUserId(response.getUserId());
+        AddToCartRequest addToCartRequest = new AddToCartRequest();
+        addToCartRequest.setUserId(response.getUserId());
+        addToCartRequest.setItem(initializedItem);
+        cartServices.addToCart(addToCartRequest);
 
-        AddToCartResponse addToCartResponse1= cartServices.addToCart(addToCartRequest1);
-        assertThat(addToCartResponse1.getItemListSize(), is(1));
+//        he has reviewed his cart
+//        Action:
+//        user sends a check-out request
+//        first, set billing information
+        SetUpBillingInformationRequest setupBillingInformationRequest = new SetUpBillingInformationRequest();
+        setupBillingInformationRequest.setBillingAddress("No1 odo close, lekki, lagos");
+        setupBillingInformationRequest.setUserId(response.getUserId());
+        setupBillingInformationRequest.setCountry("Nigeria");
+        setupBillingInformationRequest.setZipCode("105102");
+        setupBillingInformationRequest.setNationality("Nigerian");
+        setupBillingInformationRequest.setPhoneNumber("09052901359");
 
-        //       User sends an add to cart request
-        AddToCartRequest addToCartRequest2 = new AddToCartRequest();
+//        next initiate check out request
+       CheckOutRequest checkOutRequest = new CheckOutRequest();
+       checkOutRequest.setUserId(response.getUserId());
+       ShoppingCart cart = cartServices.findCartByUserId(response.getUserId());
+       checkOutRequest.setItems(cart.getItems());
+       checkOutRequest.setStatus(OrderStatus.PENDING);
+       checkOutRequest.setPaymentMethod(PaymentMethod.BANK_TRANSFER);
+       checkOutRequest.setSetupBillingInformationRequest(setupBillingInformationRequest);
 
-//        Creating second item
-        InitializeProductRequest initializeProductRequest2 = new InitializeProductRequest();
-        initializeProductRequest2.setName("Baby Stuff: Diapers");
-        initializeProductRequest2.setPrice(BigDecimal.valueOf(680400));
-        Product savedProduct2 = productServices.addProduct(initializeProductRequest2);
+       CheckOutResponse checkOutResponse =  customerServices.handleOrderRequest(checkOutRequest);
 
-        InitializeItemRequest initializeItemRequest2 = new InitializeItemRequest();
-        initializeItemRequest2.setPrice(savedProduct2.getPrice());
-        initializeItemRequest2.setProduct(savedProduct2);
-        initializeItemRequest2.setQuantity(2);
-        Item initializedItem2 = itemServices.initializeItem(initializeItemRequest2);
+       assertThat(checkOutResponse.getSubTotal(), is(notNullValue()));
+        System.out.println(checkOutResponse.getSubTotal());
+       assertThat(checkOutResponse.getId(), is(notNullValue()));
+        assertThat(checkOutResponse.getStatus(), is(OrderStatus.PENDING));
 
-        addToCartRequest2.setItem(initializedItem2);
-        addToCartRequest2.setQuantity(initializedItem2.getQuantity());
-        addToCartRequest2.setUserId(response.getUserId());
-
-        AddToCartResponse addToCartResponse2= cartServices.addToCart(addToCartRequest2);
-        assertThat(addToCartResponse2.getItemListSize(), is(2));
-
-        ShoppingCart cartFound = cartServices.findCartByUserId(response.getUserId());
-
-        CheckOutRequest checkOutRequest = new CheckOutRequest();
-        checkOutRequest.setId("123");
-        checkOutRequest.setUserId(response.getUserId());
-        checkOutRequest.setItems(cartFound.getItems());
-        checkOutRequest.setSubTotal(BigDecimal.valueOf(1000.00));
-        checkOutRequest.setPaymentMethod(PaymentMethod.BANK_TRANSFER);
-        checkOutRequest.setBillingAddress(response.getAddress());
-        checkOutRequest.setItems(cartServices.findAllItemsBy(response.getUserId()));
-        checkOutRequest.setStatus(OrderStatus.PENDING);
-        CheckOutResponse orderCreated = orderServices.createAnOrder(checkOutRequest);
-
-        assertThat(orderCreated.getId(), is(checkOutRequest.getId()));
     }
-//    @Test
-//    void testThat_UserCanLogOut_OfApp(){
-//        LogOutRequest logOutRequest = new LogOutRequest();
-//        logOutRequest.setUserId(response.getUserId());
-//
-//        User userFound = userService.findUserById(logOutRequest.getUserId());
-//        assertThat(userFound.getSessionStatus(), is(SessionStatus.LOGGED_IN));
-//
-//        LogOutResponse status = userService.logOut(logOutRequest);
-//        assertThat(status.getSessionStatus(), is(SessionStatus.LOGGED_OUT));
-//    }
-//    @Test
-//    void testThat_userCanVerifyLogIn_WhenLoggedOut(){
-//        LogOutRequest logOutRequest = new LogOutRequest();
-//        logOutRequest.setUserId(response.getUserId());
-//
-//        User userFound = userService.findUserById(logOutRequest.getUserId());
-//        assertThat(userFound.getSessionStatus(), is(SessionStatus.LOGGED_IN));
-//
-//        LogOutResponse status = userService.logOut(logOutRequest);
-//        assertThat(status.getSessionStatus(), is(SessionStatus.LOGGED_OUT));
-//
-//        LogInRequest logInRequest = new LogInRequest();
-//        logInRequest.setEmail(userFound.getEmail());
-//        logInRequest.setUserId(response.getUserId());
-//        logInRequest.setSessionStatus(userFound.getSessionStatus());
-//        logInRequest.setPassword(userFound.getPassword());
-//
-//        LogInResponse sessionStatus = userService.verifyLoginDetails(logInRequest);
-//        assertThat(sessionStatus.getSessionStatus(), is(SessionStatus.LOGGED_IN));
-//    }
+    @Test
+    void testThat_OrderStatusChangesToPaidWhenUserMakesPayment(){
+//        Pre-requisite:
+//        Given that a user exists,
+//        a cart has a user
+//        he adds item to cart
+//        he checks out
+//        Action:
+//        He makes payment
+
+
+        assertThat(userService.validateUserBy(response.getUserId()), is(true));
+//        the user has added item to cart
+        SearchProductRequest searchProductRequest = new SearchProductRequest();
+        searchProductRequest.setProductName("Gucci slides");
+        ProductFoundResponse productFoundResponse = productServices.findProductBy(searchProductRequest);
+        Product productFound =productFoundResponse.getProduct();
+
+        assertThat(productFound, is(notNullValue()));
+
+        InitializeItemRequest initializeItemRequest = new InitializeItemRequest();
+        initializeItemRequest.setProduct(productFound);
+        initializeItemRequest.setPrice(productFound.getPrice());
+        initializeItemRequest.setQuantity(5);
+        Item initializedItem = itemServices.initializeItem(initializeItemRequest);
+
+        assertThat(initializedItem, is(notNullValue()));
+
+        AddToCartRequest addToCartRequest = new AddToCartRequest();
+        addToCartRequest.setUserId(response.getUserId());
+        addToCartRequest.setItem(initializedItem);
+        cartServices.addToCart(addToCartRequest);
+
+//        he has reviewed his cart
+//        Action:
+//        user sends a check-out request
+//        first, set billing information
+        SetUpBillingInformationRequest setupBillingInformationRequest = new SetUpBillingInformationRequest();
+        setupBillingInformationRequest.setBillingAddress("No1 odo close, lekki, lagos");
+        setupBillingInformationRequest.setUserId(response.getUserId());
+        setupBillingInformationRequest.setCountry("Nigeria");
+        setupBillingInformationRequest.setZipCode("105102");
+        setupBillingInformationRequest.setNationality("Nigerian");
+        setupBillingInformationRequest.setPhoneNumber("09052901359");
+
+//        next initiate check out request
+        CheckOutRequest checkOutRequest = new CheckOutRequest();
+        checkOutRequest.setUserId(response.getUserId());
+        ShoppingCart cart = cartServices.findCartByUserId(response.getUserId());
+        checkOutRequest.setItems(cart.getItems());
+        checkOutRequest.setStatus(OrderStatus.PENDING);
+        checkOutRequest.setPaymentMethod(PaymentMethod.BANK_TRANSFER);
+        checkOutRequest.setSetupBillingInformationRequest(setupBillingInformationRequest);
+
+        CheckOutResponse checkOutResponse =  customerServices.handleOrderRequest(checkOutRequest);
+
+        assertThat(checkOutResponse.getSubTotal(), is(notNullValue()));
+        System.out.println(checkOutResponse.getSubTotal());
+        assertThat(checkOutResponse.getId(), is(notNullValue()));
+        assertThat(checkOutResponse.getStatus(), is(OrderStatus.PENDING));
+
+        Order orderFound = checkOutResponse.getOrder();
+
+        assertThat(orderFound, is(notNullValue()));
+        System.out.println(orderFound);
+        PaymentRequest paymentRequest = new PaymentRequest();
+        paymentRequest.setUserId(response.getUserId());
+        paymentRequest.setAmountToBePaid(BigDecimal.valueOf(500000));
+//        orderServices.findOrderBy(response.getUserId()
+        System.out.println(orderFound);
+        paymentRequest.setOrder(orderFound);
+        System.out.println(orderFound);
+
+
+        PaymentProcessResponse paymentProcessResponse = paymentServices.processPayment(paymentRequest);
+
+        Order updatedOrderStatus = orderServices.updateOrderStatus(paymentProcessResponse);
+
+//        Assert;
+//        that the order status changes to PAID.
+        assertThat(updatedOrderStatus.getStatus(), is(OrderStatus.PAID));
+    }
+
 
 }

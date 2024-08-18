@@ -31,15 +31,4 @@ public class ItemServicesImpl implements ItemServices {
         return item;
     }
 
-    @Override
-    public int increaseItemQuantity(IncreaseItemQuantityRequest increaseItemQuantityRequest) {
-        int increasedItemQuantity = cartServices.increaseItemQuantity(increaseItemQuantityRequest);
-        return increasedItemQuantity;
-    }
-
-    @Override
-    public int reduceItemQuantity(ReduceItemQuantityRequest reduceItemQuantityRequest) {
-        int reducedItemQuantity = cartServices.reduceItemQuantity(reduceItemQuantityRequest);
-        return reducedItemQuantity;
-    }
 }

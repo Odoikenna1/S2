@@ -2,13 +2,14 @@ package com.semicolon.africa.dtos.request;
 
 import com.semicolon.africa.data.domain.Gender;
 import com.semicolon.africa.data.domain.Role;
-import com.semicolon.africa.data.domain.SessionStatus;
 import lombok.Getter;
 import lombok.Setter;
+import org.springframework.stereotype.Component;
 
 @Setter
 @Getter
-public class RegisterUserAuthenticationRequest {
+@Component
+public class RegisterUserRequest {
     private String firstName;
     private String lastName;
     private String brandName;
@@ -21,5 +22,5 @@ public class RegisterUserAuthenticationRequest {
     private String creditCardInfo;
     private Role role;
     private boolean isActive;
-    private SessionStatus sessionStatus;
+    private boolean loggedIn = false;
 }

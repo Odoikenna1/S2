@@ -1,12 +1,16 @@
 package com.semicolon.africa.services;
 
-import com.semicolon.africa.data.models.Customer;
-import com.semicolon.africa.data.models.User;
-import com.semicolon.africa.dtos.request.LogInRequest;
-import com.semicolon.africa.dtos.request.RegisterUserAuthenticationRequest;
+import com.semicolon.africa.data.domain.BillingInformation;
+import com.semicolon.africa.data.domain.ShoppingCart;
+import com.semicolon.africa.dtos.request.AddToCartRequest;
+import com.semicolon.africa.dtos.request.CheckOutRequest;
+import com.semicolon.africa.dtos.request.SetUpBillingInformationRequest;
+import com.semicolon.africa.dtos.response.AddToCartResponse;
+import com.semicolon.africa.dtos.response.CheckOutResponse;
 
 public interface CustomerServices {
-    public User registerCustomer(RegisterUserAuthenticationRequest registerUserAuthenticationRequest);
-    public Customer findCustomerBy(String customerId);
-    public boolean validateCustomer(LogInRequest logInRequest);
+    public AddToCartResponse addToCart(AddToCartRequest addToCartRequest);
+    public BillingInformation setupBillingInformation(SetUpBillingInformationRequest setupBillingInformationRequest);
+    public ShoppingCart findCartBy(String userId);
+    public CheckOutResponse handleOrderRequest(CheckOutRequest checkOutRequest);
 }

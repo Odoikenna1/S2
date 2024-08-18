@@ -9,6 +9,4 @@ import org.springframework.stereotype.Service;
 
 public interface ItemServices {
     public Item initializeItem(InitializeItemRequest initializeItemRequest);
-    public int increaseItemQuantity(IncreaseItemQuantityRequest increaseItemQuantityRequest);
-    public int reduceItemQuantity(ReduceItemQuantityRequest reduceItemQuantityRequest);
 }

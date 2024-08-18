@@ -8,6 +8,5 @@ import org.springframework.data.annotation.Id;
 @Data
 public class AddToCartRequest {
     private Item item;
-    private int quantity;
     private String userId;
 }
